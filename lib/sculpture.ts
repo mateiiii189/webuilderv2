@@ -35,7 +35,9 @@ export async function createSculpture(
   signal?.throwIfAborted();
 
   let disposed = false;
-  let age = 0;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let age = reducedMotion.matches ? 3 : 0;
+  let inView = true;
 
   const renderer = new T.WebGLRenderer({
     alpha: true,
@@ -43,9 +45,7 @@ export async function createSculpture(
     powerPreference: "low-power",
   });
 
-  renderer.setPixelRatio(
-    Math.min(window.devicePixelRatio || 1, 1.75),
-  );
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
 
   renderer.setClearColor(0x050505, 0);
   renderer.outputColorSpace = T.SRGBColorSpace;
@@ -54,12 +54,7 @@ export async function createSculpture(
 
   const scene = new T.Scene();
 
-  const camera = new T.PerspectiveCamera(
-    32,
-    1,
-    0.1,
-    60,
-  );
+  const camera = new T.PerspectiveCamera(32, 1, 0.1, 60);
 
   camera.position.set(0, 0, 8.5);
   camera.lookAt(0, 0, 0);
@@ -80,10 +75,7 @@ export async function createSculpture(
       side: T.DoubleSide,
     });
 
-    const panel = new T.Mesh(
-      new T.PlaneGeometry(width, height),
-      material,
-    );
+    const panel = new T.Mesh(new T.PlaneGeometry(width, height), material);
 
     panel.position.set(...position);
     panel.lookAt(0, 0, 0);
@@ -99,12 +91,7 @@ export async function createSculpture(
 
   const pmrem = new T.PMREMGenerator(renderer);
 
-  const environment = pmrem.fromScene(
-    studio,
-    0.045,
-    0.1,
-    100,
-  );
+  const environment = pmrem.fromScene(studio, 0.045, 0.1, 100);
 
   scene.environment = environment.texture;
   scene.environmentIntensity = 1.05;
@@ -130,21 +117,16 @@ export async function createSculpture(
 
   // Generate fine surface grain.
   const resolution = 128;
-  const grain = new Uint8Array(
-    resolution * resolution * 4,
-  );
+  const grain = new Uint8Array(resolution * resolution * 4);
 
   let seed = 8192;
 
   for (let y = 0; y < resolution; y++) {
     for (let x = 0; x < resolution; x++) {
-      seed =
-        (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+      seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
 
       const value = Math.round(
-        170 +
-          (seed / 4294967296) * 65 +
-          Math.sin(y * 2.1) * 13,
+        170 + (seed / 4294967296) * 65 + Math.sin(y * 2.1) * 13,
       );
 
       const index = (y * resolution + x) * 4;
@@ -156,12 +138,7 @@ export async function createSculpture(
     }
   }
 
-  const finish = new T.DataTexture(
-    grain,
-    resolution,
-    resolution,
-    T.RGBAFormat,
-  );
+  const finish = new T.DataTexture(grain, resolution, resolution, T.RGBAFormat);
 
   finish.wrapS = T.RepeatWrapping;
   finish.wrapT = T.RepeatWrapping;
@@ -257,10 +234,7 @@ export async function createSculpture(
 
     geometry.translate(0, 0, -spec.depth / 2);
 
-    const mesh = new T.Mesh(
-      geometry,
-      spec.material,
-    );
+    const mesh = new T.Mesh(geometry, spec.material);
 
     sculpture.add(mesh);
 
@@ -274,9 +248,7 @@ export async function createSculpture(
   const pointer = new T.Vector2();
   const smoothPointer = new T.Vector2();
 
-  const canHover = window.matchMedia(
-    "(hover: hover) and (pointer: fine)",
-  );
+  const canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
 
   let touchStart: {
     x: number;
@@ -290,16 +262,8 @@ export async function createSculpture(
       if (!touchStart) return;
 
       pointer.set(
-        T.MathUtils.clamp(
-          (event.clientX - touchStart.x) / 140,
-          -1,
-          1,
-        ),
-        T.MathUtils.clamp(
-          (event.clientY - touchStart.y) / 180,
-          -0.6,
-          0.6,
-        ),
+        T.MathUtils.clamp((event.clientX - touchStart.x) / 140, -1, 1),
+        T.MathUtils.clamp((event.clientY - touchStart.y) / 180, -0.6, 0.6),
       );
     } else if (canHover.matches) {
       pointer.set(
@@ -323,89 +287,54 @@ export async function createSculpture(
     pointer.set(0, 0);
   };
 
-  window.addEventListener(
-    "pointermove",
-    pointerMove,
-    { passive: true },
-  );
+  window.addEventListener("pointermove", pointerMove, { passive: true });
 
-  host.addEventListener(
-    "pointerdown",
-    pointerDown,
-    { passive: true },
-  );
+  host.addEventListener("pointerdown", pointerDown, { passive: true });
 
-  window.addEventListener(
-    "pointerup",
-    pointerEnd,
-    { passive: true },
-  );
+  window.addEventListener("pointerup", pointerEnd, { passive: true });
 
-  window.addEventListener(
-    "pointercancel",
-    pointerEnd,
-    { passive: true },
-  );
+  window.addEventListener("pointercancel", pointerEnd, { passive: true });
 
-  document.documentElement.addEventListener(
-    "pointerleave",
-    pointerEnd,
-  );
+  document.documentElement.addEventListener("pointerleave", pointerEnd);
 
   const ease = (value: number) =>
-    1 -
-    Math.pow(
-      1 - T.MathUtils.clamp(value, 0, 1),
-      5,
-    );
+    1 - Math.pow(1 - T.MathUtils.clamp(value, 0, 1), 5);
 
   function updatePose(dt: number) {
     const intro = ease(age / 2.1);
 
-    smoothPointer.lerp(
-      pointer,
-      1 - Math.exp(-4 * dt),
-    );
+    if (reducedMotion.matches) {
+      pointer.set(0, 0);
+      smoothPointer.set(0, 0);
+    }
+
+    smoothPointer.lerp(pointer, 1 - Math.exp(-4 * dt));
 
     sculpture.rotation.set(
-      0.13 +
-        Math.sin(age * 0.39) * 0.038 +
-        smoothPointer.y * 0.13,
+      0.13 + Math.sin(age * 0.39) * 0.038 + smoothPointer.y * 0.13,
 
-      -0.4 +
-        Math.sin(age * 0.31) * 0.09 +
-        smoothPointer.x * 0.26,
+      -0.4 + Math.sin(age * 0.31) * 0.09 + smoothPointer.x * 0.26,
 
       -0.105 + Math.sin(age * 0.27) * 0.015,
     );
 
-    sculpture.position.y =
-      Math.sin(age * 0.65) * 0.065 -
-      (1 - intro) * 0.3;
+    sculpture.position.y = Math.sin(age * 0.65) * 0.065 - (1 - intro) * 0.3;
 
-    sculpture.scale.setScalar(
-      0.93 + intro * 0.07,
-    );
+    sculpture.scale.setScalar(0.93 + intro * 0.07);
 
     for (const plate of plates) {
-      const assembled = ease(
-        (age - plate.entry) / 1.75,
-      );
+      const assembled = ease((age - plate.entry) / 1.75);
 
       plate.mesh.position.set(
         0,
 
-        (1 - assembled) *
-          (plate.entry * 1.5 - 0.18),
+        (1 - assembled) * (plate.entry * 1.5 - 0.18),
 
-        plate.z +
-          (1 - assembled) *
-            (plate.z > 0 ? 1.7 : -0.85),
+        plate.z + (1 - assembled) * (plate.z > 0 ? 1.7 : -0.85),
       );
     }
 
-    key.position.x =
-      -3 + Math.sin(age * 0.22) * 1.2;
+    key.position.x = -3 + Math.sin(age * 0.22) * 1.2;
   }
 
   const loop = createFrameLoop(
@@ -416,51 +345,38 @@ export async function createSculpture(
       renderer.render(scene, camera);
     },
     {
-      request: (callback) =>
-        requestAnimationFrame(callback),
+      request: (callback) => requestAnimationFrame(callback),
 
-      cancel: (handle) =>
-        cancelAnimationFrame(handle),
+      cancel: (handle) => cancelAnimationFrame(handle),
 
       now: () => performance.now(),
 
-      visible: () => !document.hidden,
+      // Recheck eligibility on every frame, including a frame already queued
+      // when the operating system's motion preference changes.
+      visible: () => !document.hidden && !reducedMotion.matches,
     },
   );
 
   function resize() {
     if (disposed) return;
 
-    const { width, height } =
-      host.getBoundingClientRect();
+    const { width, height } = host.getBoundingClientRect();
 
     if (width < 1 || height < 1) return;
 
     camera.aspect = width / height;
 
-    const verticalFov = T.MathUtils.degToRad(
-      camera.fov,
-    );
+    const verticalFov = T.MathUtils.degToRad(camera.fov);
 
     // Higher value = smaller W with more space around it.
     const safety = 1.6;
 
-    const verticalDistance =
-      (safety * 3.9) /
-      (2 * Math.tan(verticalFov / 2));
+    const verticalDistance = (safety * 3.9) / (2 * Math.tan(verticalFov / 2));
 
     const horizontalDistance =
-      (safety * 5.25) /
-      (
-        2 *
-        Math.tan(verticalFov / 2) *
-        camera.aspect
-      );
+      (safety * 5.25) / (2 * Math.tan(verticalFov / 2) * camera.aspect);
 
-    camera.position.z = Math.max(
-      verticalDistance,
-      horizontalDistance,
-    );
+    camera.position.z = Math.max(verticalDistance, horizontalDistance);
 
     camera.updateProjectionMatrix();
 
@@ -471,9 +387,17 @@ export async function createSculpture(
   const observer = new ResizeObserver(resize);
   observer.observe(host);
 
+  const syncMotion = () => {
+    if (reducedMotion.matches) age = 3;
+    loop.setInView(inView && !reducedMotion.matches);
+  };
+  reducedMotion.addEventListener("change", syncMotion);
+  syncMotion();
+
   const intersection = new IntersectionObserver(
     ([entry]) => {
-      loop.setInView(entry.isIntersecting);
+      inView = entry.isIntersecting;
+      syncMotion();
     },
     { threshold: 0.01 },
   );
@@ -482,10 +406,7 @@ export async function createSculpture(
 
   const visibility = () => loop.refresh();
 
-  document.addEventListener(
-    "visibilitychange",
-    visibility,
-  );
+  document.addEventListener("visibilitychange", visibility);
 
   host.appendChild(renderer.domElement);
   resize();
@@ -498,36 +419,19 @@ export async function createSculpture(
     loop.destroy();
     observer.disconnect();
     intersection.disconnect();
+    reducedMotion.removeEventListener("change", syncMotion);
 
-    window.removeEventListener(
-      "pointermove",
-      pointerMove,
-    );
+    window.removeEventListener("pointermove", pointerMove);
 
-    host.removeEventListener(
-      "pointerdown",
-      pointerDown,
-    );
+    host.removeEventListener("pointerdown", pointerDown);
 
-    window.removeEventListener(
-      "pointerup",
-      pointerEnd,
-    );
+    window.removeEventListener("pointerup", pointerEnd);
 
-    window.removeEventListener(
-      "pointercancel",
-      pointerEnd,
-    );
+    window.removeEventListener("pointercancel", pointerEnd);
 
-    document.documentElement.removeEventListener(
-      "pointerleave",
-      pointerEnd,
-    );
+    document.documentElement.removeEventListener("pointerleave", pointerEnd);
 
-    document.removeEventListener(
-      "visibilitychange",
-      visibility,
-    );
+    document.removeEventListener("visibilitychange", visibility);
 
     plates.forEach(({ mesh }) => {
       mesh.geometry.dispose();

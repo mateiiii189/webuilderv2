@@ -4,193 +4,108 @@ import { useEffect } from "react";
 
 export default function PageMotion() {
   // Section navigation without changing the URL.
-useEffect(() => {
-  let frame = 0;
+  useEffect(() => {
+    let frame = 0;
 
-  const cleanAddress = () => {
-    if (location.hash) {
-      history.replaceState(
-        history.state,
-        "",
-        location.pathname + location.search
-      );
-    }
-  };
+    const cleanAddress = () => {
+      if (location.hash) {
+        history.replaceState(
+          history.state,
+          "",
+          location.pathname + location.search,
+        );
+      }
+    };
 
-  cleanAddress();
-
-  const navigate = (event: MouseEvent) => {
-    if (
-      event.button !== 0 ||
-      event.metaKey ||
-      event.ctrlKey ||
-      event.shiftKey ||
-      event.altKey
-    ) {
-      return;
-    }
-
-    const link =
-      event.target instanceof Element
-        ? event.target.closest<HTMLAnchorElement>('a[href^="#"]')
-        : null;
-
-    if (!link || link.target || link.hasAttribute("download")) {
-      return;
-    }
-
-    let id: string;
-
-    try {
-      id = decodeURIComponent(link.hash.slice(1));
-    } catch {
-      return;
-    }
-
-    const target = document.getElementById(id);
-
-    if (!target) return;
-
-    event.preventDefault();
     cleanAddress();
-    cancelAnimationFrame(frame);
 
-    const moveFocus =
-      event.detail === 0 ||
-      link.classList.contains("skip-link");
-
-    // Allow the mobile menu to close first.
-    frame = requestAnimationFrame(() => {
-      const headerHeight =
-        document
-          .querySelector(".site-header")
-          ?.getBoundingClientRect().height ?? 0;
-
-      const top =
-        id === "top"
-          ? 0
-          : Math.max(
-              0,
-              window.scrollY +
-                target.getBoundingClientRect().top -
-                headerHeight -
-                24
-            );
-
-      // Move focus only for keyboard navigation.
-      if (moveFocus) {
-        const hadTabIndex = target.hasAttribute("tabindex");
-
-        if (!hadTabIndex) {
-          target.setAttribute("tabindex", "-1");
-        }
-
-        target.focus({ preventScroll: true });
-
-        if (!hadTabIndex) {
-          target.addEventListener(
-            "blur",
-            () => target.removeAttribute("tabindex"),
-            { once: true }
-          );
-        }
+    const navigate = (event: MouseEvent) => {
+      if (
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      ) {
+        return;
       }
 
-      window.scrollTo({
-        top,
-        behavior: "instant",
-      });
-    });
-  };
+      const link =
+        event.target instanceof Element
+          ? event.target.closest<HTMLAnchorElement>('a[href^="#"]')
+          : null;
 
-  document.addEventListener("click", navigate, true);
+      if (!link || link.target || link.hasAttribute("download")) {
+        return;
+      }
 
-  return () => {
-    cancelAnimationFrame(frame);
-    document.removeEventListener("click", navigate, true);
-  };
-}, []);
+      let id: string;
 
-  // Smooth service accordions.
-  useEffect(() => {
-    const reduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    );
+      try {
+        id = decodeURIComponent(link.hash.slice(1));
+      } catch {
+        return;
+      }
 
-    const disposers = Array.from(
-      document.querySelectorAll<HTMLDetailsElement>(".service-item")
-    ).map((item) => {
-      const summary = item.querySelector("summary");
+      const target = document.getElementById(id);
 
-      if (!summary) return () => {};
+      if (!target) return;
 
-      let animation: Animation | null = null;
-      let expanded = item.open;
+      event.preventDefault();
+      cleanAddress();
+      cancelAnimationFrame(frame);
 
-      const settle = () => {
-        animation?.cancel();
-        animation = null;
+      const moveFocus =
+        event.detail === 0 || link.hasAttribute("data-skip-link");
 
-        item.open = expanded;
-        item.style.height = "";
-        item.style.overflow = "";
+      // Allow the mobile menu to close first.
+      frame = requestAnimationFrame(() => {
+        const headerHeight =
+          document.querySelector("[data-site-header]")?.getBoundingClientRect()
+            .height ?? 0;
 
-        delete item.dataset.expanded;
-      };
+        const top =
+          id === "top"
+            ? 0
+            : Math.max(
+                0,
+                window.scrollY +
+                  target.getBoundingClientRect().top -
+                  headerHeight -
+                  24,
+              );
 
-      const toggle = (event: MouseEvent) => {
-        event.preventDefault();
+        // Move focus only for keyboard navigation.
+        if (moveFocus) {
+          const hadTabIndex = target.hasAttribute("tabindex");
 
-        const start = item.getBoundingClientRect().height;
+          if (!hadTabIndex) {
+            target.setAttribute("tabindex", "-1");
+          }
 
-        animation?.cancel();
-        expanded = !expanded;
+          target.focus({ preventScroll: true });
 
-        if (reduced.matches) {
-          settle();
-          return;
+          if (!hadTabIndex) {
+            target.addEventListener(
+              "blur",
+              () => target.removeAttribute("tabindex"),
+              { once: true },
+            );
+          }
         }
 
-        item.style.height = "";
+        window.scrollTo({
+          top,
+          behavior: "instant",
+        });
+      });
+    };
 
-        item.open = false;
-        const closed = item.getBoundingClientRect().height;
-
-        item.open = true;
-        const opened = item.getBoundingClientRect().height;
-
-        item.dataset.expanded = String(expanded);
-        item.style.overflow = "hidden";
-
-        animation = item.animate(
-          [
-            { height: `${start}px` },
-            { height: `${expanded ? opened : closed}px` },
-          ],
-          {
-            duration: 650,
-            easing: "cubic-bezier(0.22, 1, 0.36, 1)",
-            fill: "both",
-          }
-        );
-
-        animation.onfinish = settle;
-      };
-
-      summary.addEventListener("click", toggle);
-      window.addEventListener("resize", settle);
-      reduced.addEventListener("change", settle);
-
-      return () => {
-        settle();
-        summary.removeEventListener("click", toggle);
-        window.removeEventListener("resize", settle);
-        reduced.removeEventListener("change", settle);
-      };
-    });
+    document.addEventListener("click", navigate, true);
 
     return () => {
-      disposers.forEach((dispose) => dispose());
+      cancelAnimationFrame(frame);
+      document.removeEventListener("click", navigate, true);
     };
   }, []);
 
