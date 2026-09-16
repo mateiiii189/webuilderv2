@@ -258,3 +258,28 @@ test("homepage remains readable and native accordions work without JavaScript", 
   await expect(item).toHaveAttribute("open");
   await context.close();
 });
+
+test("manual scrolling back to the top stays there across repeated reloads", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await page
+    .getByRole("navigation", { name: "Navigație principală", exact: true })
+    .getByRole("link", { name: "Proces", exact: true })
+    .click();
+  await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(1000);
+  await page.mouse.wheel(0, -20000);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
+  for (let i = 0; i < 4; i++) {
+    await page.reload({ waitUntil: "load" });
+    await expect(page.locator("[data-hero-copy]")).toBeVisible();
+    await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
+    expect(new URL(page.url()).hash).toBe("");
+  }
+  // Reload should preserve the actual last position, not always force the top.
+  await page.mouse.wheel(0, 650);
+  await expect.poll(() => page.evaluate(() => scrollY)).toBe(650);
+  await page.reload({ waitUntil: "load" });
+  await expect.poll(() => page.evaluate(() => scrollY)).toBe(650);
+});

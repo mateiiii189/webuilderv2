@@ -35,13 +35,13 @@ export default function Button({
 }: ButtonProps) {
   const isBack = direction === "back";
   const classes = [
-    "group/button inline-flex min-h-control w-fit max-w-full items-center justify-center gap-6 rounded-control border px-[22px] py-[13px] text-center text-sm font-medium leading-normal transition-[transform,background-color,border-color,color] duration-200 ease-brand focus-visible:outline-offset-5 disabled:cursor-not-allowed disabled:opacity-45 motion-safe:enabled:hover:-translate-y-0.5 motion-safe:enabled:active:translate-y-0 motion-safe:enabled:active:scale-[0.98] motion-safe:[&:not(button)]:hover:-translate-y-0.5 motion-safe:[&:not(button)]:active:translate-y-0 motion-safe:[&:not(button)]:active:scale-[0.98] motion-reduce:transition-none",
+    "group/button inline-flex min-h-control w-fit max-w-full items-center justify-center gap-6 rounded-control border px-[22px] py-[13px] text-center text-sm font-medium leading-normal transition-[transform,translate,scale,background-color,border-color,color] duration-500 ease-in-out focus-visible:outline-offset-5 disabled:cursor-not-allowed disabled:opacity-45 motion-safe:enabled:hover:-translate-y-0.5 motion-safe:enabled:active:translate-y-0 motion-safe:enabled:active:scale-[0.98] motion-safe:[&:not(button)]:hover:-translate-y-0.5 motion-safe:[&:not(button)]:active:translate-y-0 motion-safe:[&:not(button)]:active:scale-[0.98] motion-reduce:transition-none",
     variants[variant],
     className,
   ].join(" ");
   const icon = arrow && (
     <svg
-      className={`size-6 shrink-0 transition-transform duration-200 ease-brand motion-reduce:transition-none ${
+      className={`size-6 shrink-0 transition-transform duration-500 ease-in-out motion-reduce:transition-none ${
         isBack
           ? "motion-safe:group-hover/button:-translate-x-1 motion-safe:group-focus-visible/button:-translate-x-1"
           : "motion-safe:group-hover/button:translate-x-1 motion-safe:group-focus-visible/button:translate-x-1"

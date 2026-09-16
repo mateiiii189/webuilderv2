@@ -16,7 +16,7 @@ export function BrandMark({ className = "" }: { className?: string }) {
 export default function Brand({ href = "#top" }: { href?: string }) {
   return (
     <Link
-      className="inline-flex shrink-0 items-center gap-2 text-[22px] font-brand tracking-heading transition-opacity duration-200 hover:opacity-80 motion-reduce:transition-none lg:gap-2.5 lg:text-[26px]"
+      className="inline-flex shrink-0 items-center gap-2 text-[22px] font-brand tracking-heading transition-opacity duration-500 ease-in-out hover:opacity-80 motion-reduce:transition-none lg:gap-2.5 lg:text-[26px]"
       href={href}
       aria-label="Webuilder — pagina principală"
     >

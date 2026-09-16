@@ -28,7 +28,7 @@ npm start
 - Contact page: project enquiry form, meeting enquiry, and next steps.
 - Shared header, accessible native mobile dialog, footer, and 404 page.
 - Shared primary/secondary buttons with forward/back arrows, form fields, headings, accordion, and replayable reveals.
-- Instant section navigation followed by reveal animations. Normal clicks do not add URL hashes. Keyboard navigation moves focus appropriately; mouse clicks do not focus whole sections.
+- Instant section navigation followed by reveal animations. Normal clicks do not add URL hashes. Keyboard navigation moves focus appropriately; mouse clicks do not focus whole sections. Reloads restore the last actual scroll position captured on page exit, rather than an older section destination.
 - Desktop 3D loads dynamically, pauses outside the viewport and in hidden tabs, and becomes static with reduced motion. Mobile does not initialize or load the scene.
 
 Project examples remain labelled as demonstrations; they are not presented as client work.
@@ -49,7 +49,7 @@ Project examples remain labelled as demonstrations; they are not presented as cl
 
 Use theme utilities such as `bg-primary`, `text-muted`, `rounded-control`, `px-gutter`, and `py-section`. Use the shared components instead of copying their utility lists into new pages. Arbitrary values are reserved for the existing bespoke hero composition and decorative project illustrations.
 
-Breakpoints are `sm: 601px`, `lg: 901px`, `xl: 1101px`, and `2xl: 1600px`. JavaScript's desktop media queries use the same 901px boundary. Buttons have 8px corners and a minimum height of 52px. Brand interactions change opacity without moving the logo. Reduced motion disables entrances and hover movement.
+Breakpoints are `sm: 601px`, `lg: 901px`, `xl: 1101px`, and `2xl: 1600px`. JavaScript's desktop media queries use the same 901px boundary. Buttons have 8px corners and a minimum height of 52px. Buttons and arrows use 500ms hover transitions; the logo and wordmark fade together over the same duration without shifting position. Reduced motion disables entrances and hover movement.
 
 The design's primary color remains the repository's `#f6c700`, with `#ffda28` on hover. Change the tokens once to change all UI accents. The sculpture has separate physical materials in `lib/sculpture.ts` so lighting and metal appearance remain independently controlled.
 
