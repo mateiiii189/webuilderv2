@@ -6,6 +6,14 @@ export default defineConfig({
   workers: 1,
   timeout: 30_000,
   reporter: "list",
+  projects: [
+    { name: "chromium", use: { browserName: "chromium" } },
+    {
+      name: "webkit-scroll",
+      testMatch: "scroll.spec.ts",
+      use: { browserName: "webkit", launchOptions: {} },
+    },
+  ],
   use: {
     baseURL: "http://127.0.0.1:3100",
     trace: "retain-on-failure",

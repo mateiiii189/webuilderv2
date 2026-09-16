@@ -28,7 +28,7 @@ npm start
 - Contact page: project enquiry form, meeting enquiry, and next steps.
 - Shared header, accessible native mobile dialog, footer, and 404 page.
 - Shared primary/secondary buttons with forward/back arrows, form fields, headings, accordion, and replayable reveals.
-- Instant section navigation followed by reveal animations. Normal clicks do not add URL hashes. Keyboard navigation moves focus appropriately; mouse clicks do not focus whole sections. Reloads restore the last actual scroll position captured on page exit, rather than an older section destination.
+- Instant section navigation followed by reveal animations. Normal clicks do not add URL hashes. Keyboard navigation moves focus appropriately; mouse clicks do not focus whole sections. Reloads use a scroll checkpoint updated while scrolling and on page exit. Native restoration stays disabled for that reload, so it cannot replay an older position after `pageshow`; Back/Forward navigation returns control to the browser.
 - Desktop 3D loads dynamically, pauses outside the viewport and in hidden tabs, and becomes static with reduced motion. Mobile does not initialize or load the scene.
 
 Project examples remain labelled as demonstrations; they are not presented as client work.
@@ -79,16 +79,16 @@ Sanity is the selected next step for editable portfolio projects and blog posts.
 
 ## Browser checks
 
-Install Chromium once:
+Install the test browsers once:
 
 ```bash
-npx playwright install chromium
+npx playwright install chromium webkit
 npm run test:e2e
 ```
 
 The tests build and run a production server on port 3100 with a reserved `.test` email address. No email is sent. Coverage includes responsive layout, mobile menu, navigation/reload regressions, reveal replay, accordion reversal, button direction, keyboard access, contact validation, reduced motion, and no-JavaScript homepage behavior.
 
-The suite checks widths from 320px to 1920px. It uses Chromium; real Safari/iOS and GPU appearance should also be checked before launch. Run `npm run build` with your real production environment after testing, because the test build contains the test email address.
+The suite checks widths from 320px to 1920px in Chromium. Scroll regressions also run in WebKit, including ten repeated reloads at desktop/mobile widths, a delayed post-load check, mid-page reloads, Back/Forward, and unavailable session storage. WebKit automation is not a substitute for testing real Safari/iOS and GPU appearance before launch. Run `npm run build` with your real production environment after testing, because the test build contains the test email address.
 
 ## Deployment
 
