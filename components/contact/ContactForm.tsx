@@ -61,6 +61,7 @@ export default function ContactForm({ email }: { email: string }) {
 
       <form
         id="contact-form"
+        className="animate-enter motion-reduce:animate-none"
         aria-label="Despre proiectul tău"
         hidden={meeting}
         onSubmit={prepareEmail}

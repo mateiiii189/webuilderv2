@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, type FormEvent } from "react";
+import TextEntrance from "@/components/ui/TextEntrance";
 import Button from "@/components/ui/Button";
 import FormField, { Input, Textarea } from "@/components/ui/FormField";
 import SlotPicker from "./SlotPicker";
@@ -122,7 +123,10 @@ export default function BookingFlow({
 
   if (step === "done")
     return (
-      <div role="status" className="py-5">
+      <div
+        role="status"
+        className="animate-enter py-5 motion-reduce:animate-none"
+      >
         <span
           aria-hidden="true"
           className="mb-6 flex size-12 items-center justify-center rounded-control border border-primary/40 text-2xl text-primary"
@@ -134,15 +138,17 @@ export default function BookingFlow({
           tabIndex={-1}
           className="text-3xl font-medium tracking-heading outline-none"
         >
-          {link ? "Noua dată este confirmată." : "Ne vedem la întâlnire."}
+          <TextEntrance>
+            {link ? "Noua dată este confirmată." : "Ne vedem la întâlnire."}
+          </TextEntrance>
         </h2>
-        <p className="mt-5 text-lg text-foreground">
+        <p className="mt-5 animate-enter text-lg text-foreground [animation-delay:200ms] motion-reduce:animate-none">
           {slot && describeSlot(slot.startIso)}
         </p>
         <p className="mt-2 text-sm text-muted">
           60 de minute · ora Bucureștiului · Google Meet
         </p>
-        <p className="mt-6 text-sm leading-relaxed text-muted">
+        <p className="mt-6 animate-enter text-sm leading-relaxed text-muted [animation-delay:300ms] motion-reduce:animate-none">
           Confirmarea și linkul Google Meet au fost trimise la{" "}
           <span className="wrap-anywhere text-foreground">{recipient}</span>. În
           același e-mail găsești linkurile pentru anulare și reprogramare.
@@ -155,25 +161,33 @@ export default function BookingFlow({
 
   return (
     <div aria-busy={pending}>
-      <p className="mb-4 text-kicker tracking-kicker text-primary">
-        {step === "pin"
-          ? "02 / CONFIRMAREA PRIN E-MAIL"
-          : "01 / DATA ȘI DETALIILE"}
-      </p>
-      <h2 className="mb-3 text-[clamp(25px,2.4vw,34px)] leading-tight font-medium tracking-heading">
-        {step === "pin"
-          ? "Verifică-ți e-mailul."
-          : link
-            ? "Alege noul interval."
-            : "Hai să ne cunoaștem."}
-      </h2>
-      <p className="mb-7 text-sm leading-relaxed text-muted">
-        {step === "pin"
-          ? `Am trimis un cod de 6 cifre la ${recipient}. Codul este valabil 10 minute.`
-          : "Alege un interval disponibil. Confirmi programarea cu un cod primit prin e-mail."}
-      </p>
+      <div key={step}>
+        <p className="mb-4 animate-enter text-kicker tracking-kicker text-primary motion-reduce:animate-none">
+          {step === "pin"
+            ? "02 / CONFIRMAREA PRIN E-MAIL"
+            : "01 / DATA ȘI DETALIILE"}
+        </p>
+        <h2 className="mb-3 text-[clamp(25px,2.4vw,34px)] leading-tight font-medium tracking-heading">
+          <TextEntrance>
+            {step === "pin"
+              ? "Verifică-ți e-mailul."
+              : link
+                ? "Alege noul interval."
+                : "Hai să ne cunoaștem."}
+          </TextEntrance>
+        </h2>
+        <p className="mb-7 animate-enter text-sm leading-relaxed text-muted [animation-delay:150ms] motion-reduce:animate-none">
+          {step === "pin"
+            ? `Am trimis un cod de 6 cifre la ${recipient}. Codul este valabil 10 minute.`
+            : "Alege un interval disponibil. Confirmi programarea cu un cod primit prin e-mail."}
+        </p>
+      </div>
       {errorMessage}
-      <form onSubmit={submitDetails} hidden={step !== "details"}>
+      <form
+        onSubmit={submitDetails}
+        hidden={step !== "details"}
+        className="animate-enter [animation-delay:200ms] motion-reduce:animate-none"
+      >
         <fieldset disabled={pending} className="min-w-0 disabled:opacity-70">
           {details && (
             <p className="mb-5 text-sm leading-relaxed text-muted">
@@ -236,7 +250,10 @@ export default function BookingFlow({
         </fieldset>
       </form>
       {step === "pin" && (
-        <form onSubmit={verify}>
+        <form
+          onSubmit={verify}
+          className="animate-enter [animation-delay:200ms] motion-reduce:animate-none"
+        >
           <p className="mb-6 border-y border-border py-4 text-sm leading-relaxed text-soft">
             {slot && describeSlot(slot.startIso)}
             <br />

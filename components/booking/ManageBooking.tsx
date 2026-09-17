@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import TextEntrance from "@/components/ui/TextEntrance";
 import Button from "@/components/ui/Button";
 import BookingFlow from "./BookingFlow";
 import {
@@ -87,9 +88,9 @@ export default function ManageBooking({
     );
   if (cancelled)
     return (
-      <div role="status">
+      <div role="status" className="animate-enter motion-reduce:animate-none">
         <h2 className="text-3xl font-medium tracking-heading">
-          Programarea a fost anulată.
+          <TextEntrance>Programarea a fost anulată.</TextEntrance>
         </h2>
         <p className="mt-5 text-sm leading-relaxed text-muted">
           Întâlnirea din {details?.date}, ora {details?.time}, a fost anulată.
@@ -130,7 +131,7 @@ export default function ManageBooking({
         </Button>
       )}
       {details && (
-        <>
+        <div className="animate-enter motion-reduce:animate-none">
           {mode === "cancel" && (
             <p className="mb-7 border-b border-border pb-6 text-sm leading-relaxed text-muted">
               PROGRAMAREA ACTUALĂ
@@ -167,7 +168,7 @@ export default function ManageBooking({
               </div>
             </>
           )}
-        </>
+        </div>
       )}
     </>
   );

@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 // This suite uses the real Next route with a simulated Apps Script upstream.
 test.skip(
@@ -15,11 +15,19 @@ function futureDay(offset = 2) {
   return date.toISOString().slice(0, 10);
 }
 
+async function selectDate(page: Page, key: string) {
+  await page.getByLabel("Alege ziua").click();
+  const day = page.locator(`[data-date="${key}"]`);
+  if (!(await day.count()))
+    await page.getByRole("button", { name: "Luna următoare" }).click();
+  await day.click();
+}
+
 for (const width of [320, 390, 768, 1440]) {
   test(`booking and PIN confirmation work at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.goto("/programare");
-    await page.getByLabel("Alege ziua").fill(futureDay());
+    await selectDate(page, futureDay());
     await page
       .locator("label")
       .filter({ has: page.getByRole("radio", { name: /\d{2}:00/ }) })
@@ -36,6 +44,19 @@ for (const width of [320, 390, 768, 1440]) {
       .getByRole("button", { name: "Trimite codul de verificare" })
       .click();
     await expect(page.getByLabel("Codul din e-mail")).toBeFocused();
+    await page.getByRole("button", { name: "Modifică detaliile" }).click();
+    await expect(page.getByLabel("Numele tău", { exact: true })).toHaveValue(
+      "Client Test",
+    );
+    await expect(
+      page.getByLabel("Adresa de e-mail", { exact: true }),
+    ).toHaveValue("client@example.test");
+    await expect(
+      page.getByRole("radio", { name: /\d{2}:00/ }).first(),
+    ).toBeChecked();
+    await page
+      .getByRole("button", { name: "Trimite codul de verificare" })
+      .click();
     await page.getByLabel("Codul din e-mail").fill("111111");
     await page
       .getByRole("button", { name: "Confirmă programarea", exact: true })
@@ -64,7 +85,7 @@ test("rescheduling requires a PIN and cancellation requires an explicit click", 
 }) => {
   await page.goto(`/reprogramare?id=test-event&signature=${signature}`);
   await expect(page.getByText(/Programarea actuală:/)).toContainText("14:00");
-  await page.getByLabel("Alege ziua").fill(futureDay(3));
+  await selectDate(page, futureDay(3));
   await page
     .locator("label")
     .filter({ has: page.getByRole("radio", { name: /\d{2}:00/ }) })
@@ -111,7 +132,7 @@ test("invalid links and unavailable slots do not show confirmation", async ({
     "nu este valid",
   );
   await page.goto("/programare");
-  await page.getByLabel("Alege ziua").fill(futureDay());
+  await selectDate(page, futureDay());
   await page
     .locator("label")
     .filter({ has: page.getByRole("radio", { name: /\d{2}:00/ }) })
@@ -189,4 +210,69 @@ test("server validates requests, injects its own secret, and strips upstream dat
   });
   expect(uncertain.status()).toBe(502);
   expect((await uncertain.json()).code).toBe("UNCERTAIN");
+});
+
+test("calendar is usable on a narrow screen, respects bounds, and supports the keyboard", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto("/contact");
+  await page.getByText("Discuție online", { exact: true }).click();
+  await page.getByLabel("Alege ziua").click();
+  const calendar = page.getByRole("group", { name: "Calendar programări" });
+  const bounds = await calendar.boundingBox();
+  expect(bounds!.width).toBeGreaterThan(220);
+  expect(bounds!.x).toBeGreaterThanOrEqual(0);
+  expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(320);
+  await expect(
+    page.getByRole("button", { name: "Luna precedentă" }),
+  ).toBeDisabled();
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Bucharest",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  const maximum = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Europe/Bucharest",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date(Date.now() + 60 * 86400000));
+  for (let month = 0; month < 4; month++) {
+    for (const day of await calendar.locator("[data-date]").all()) {
+      const key = (await day.getAttribute("data-date"))!;
+      const weekend = [0, 6].includes(new Date(`${key}T12:00:00Z`).getUTCDay());
+      if (weekend || key < today || key > maximum)
+        await expect(day).toBeDisabled();
+      else await expect(day).toBeEnabled();
+    }
+    const next = page.getByRole("button", { name: "Luna următoare" });
+    if (await next.isDisabled()) break;
+    await next.click();
+  }
+  await expect(
+    page.getByRole("button", { name: "Luna următoare" }),
+  ).toBeDisabled();
+  const enabled = calendar.locator("[data-date]:enabled");
+  await enabled.first().focus();
+  const firstKey = await enabled.first().getAttribute("data-date");
+  await page.keyboard.press("ArrowRight");
+  expect(await page.locator(":focus").getAttribute("data-date")).not.toBe(
+    firstKey,
+  );
+  await page.keyboard.press("Escape");
+  await expect(calendar).toHaveCount(0);
+  await expect(page.getByLabel("Alege ziua")).toBeFocused();
+});
+
+test("contact title uses hero entrance and respects reduced motion", async ({
+  page,
+}) => {
+  await page.goto("/contact");
+  const title = page.locator("h1 .animate-title").first();
+  await expect(title).toHaveCSS("animation-name", "title-enter");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(title).toHaveCSS("animation-name", "none");
+  await expect(title).toHaveCSS("opacity", "1");
 });

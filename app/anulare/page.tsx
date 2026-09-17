@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import PageShell from "@/components/layout/PageShell";
 import ManageBooking from "@/components/booking/ManageBooking";
+import TextEntrance from "@/components/ui/TextEntrance";
 import Button from "@/components/ui/Button";
 
 export const metadata: Metadata = {
@@ -24,13 +25,13 @@ export default async function Page({
   return (
     <PageShell innerPage>
       <section className="mx-auto max-w-2xl py-10 sm:py-18">
-        <p className="mb-5 text-kicker tracking-kicker text-primary">
+        <p className="mb-5 animate-enter text-kicker tracking-kicker text-primary motion-reduce:animate-none">
           WEBUILDER / PROGRAMAREA TA
         </p>
         <h1 className="mb-8 text-section-mobile leading-tight font-medium tracking-heading">
-          Anulează programarea
+          <TextEntrance>Anulează programarea</TextEntrance>
         </h1>
-        <div className="booking-interactive rounded-card border border-border bg-surface p-5 sm:p-9">
+        <div className="booking-interactive animate-enter rounded-card border border-border bg-surface p-5 [animation-delay:200ms] motion-reduce:animate-none sm:p-9">
           {valid ? (
             <ManageBooking mode="cancel" link={{ eventId, signature }} />
           ) : (

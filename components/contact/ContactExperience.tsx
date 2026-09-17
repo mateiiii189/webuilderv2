@@ -1,3 +1,4 @@
+import TextEntrance from "@/components/ui/TextEntrance";
 import ContactForm from "./ContactForm";
 import AccordionItem from "@/components/ui/AccordionItem";
 import Reveal from "@/components/ui/Reveal";
@@ -28,25 +29,27 @@ export default function ContactExperience({ email }: { email: string }) {
     <>
       <div className="grid items-start gap-x-[clamp(40px,7vw,120px)] gap-y-9 pt-9 pb-16 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-y-12 lg:pt-18 lg:pb-24">
         <Reveal>
-          <p className={`${kicker} mb-6 flex items-center gap-3`}>
+          <p
+            className={`${kicker} mb-6 flex animate-enter items-center gap-3 motion-reduce:animate-none`}
+          >
             <span className="h-px w-6 bg-primary" aria-hidden="true" />
             CONTACT / WEBUILDER
           </p>
           <h1 className="text-[clamp(46px,11vw,76px)] leading-[1.06] font-medium tracking-hero lg:text-[clamp(58px,5.9vw,96px)]">
-            Ai o idee?
-            <br />
-            Hai s-o
-            <br />
-            <span className="text-primary">construim.</span>
+            <TextEntrance delay={120}>Ai o idee?</TextEntrance>
+            <TextEntrance delay={250}>Hai s-o</TextEntrance>
+            <TextEntrance delay={380}>
+              <span className="text-primary">construim.</span>
+            </TextEntrance>
           </h1>
-          <p className="mt-6 max-w-[36ch] text-[15px] leading-relaxed text-muted sm:text-base lg:mt-8">
+          <p className="mt-6 max-w-[36ch] animate-enter text-[15px] leading-relaxed text-muted [animation-delay:450ms] motion-reduce:animate-none sm:text-base lg:mt-8">
             Un website, o aplicație sau un mod mai simplu de a lucra. Începem cu
             ce contează pentru afacerea ta.
           </p>
           {email && (
             <a
               href={`mailto:${email}`}
-              className={`${textLink} mt-5 inline-flex items-center gap-4 text-sm wrap-anywhere`}
+              className={`${textLink} mt-5 inline-flex animate-enter items-center gap-4 text-sm wrap-anywhere [animation-delay:550ms] motion-reduce:animate-none`}
             >
               {email}
               <span aria-hidden="true">↗</span>
@@ -55,7 +58,9 @@ export default function ContactExperience({ email }: { email: string }) {
         </Reveal>
 
         <Reveal className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
-          <ContactForm email={email} />
+          <div className="animate-enter [animation-delay:250ms] motion-reduce:animate-none">
+            <ContactForm email={email} />
+          </div>
           <noscript>
             <style>{`.contact-form { display: none; }`}</style>
             <p className="border-t border-border py-8 text-sm text-muted">
@@ -79,7 +84,7 @@ export default function ContactExperience({ email }: { email: string }) {
 
         <Reveal className="lg:col-start-1">
           <aside
-            className="border-t border-border pt-7"
+            className="animate-enter border-t border-border pt-7 [animation-delay:550ms] motion-reduce:animate-none"
             aria-labelledby="meeting-title"
           >
             <p className={kicker}>MAI SIMPLU, FAȚĂ ÎN FAȚĂ.</p>

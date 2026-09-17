@@ -2,14 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Button from "@/components/ui/Button";
-import FormField, { Input } from "@/components/ui/FormField";
-import {
-  booking,
-  bucharestDate,
-  requestBooking,
-  type BookingLink,
-  type Slot,
-} from "@/lib/booking";
+import DatePicker from "./DatePicker";
+import { requestBooking, type BookingLink, type Slot } from "@/lib/booking";
 
 export default function SlotPicker({
   value,
@@ -66,28 +60,7 @@ export default function SlotPicker({
 
   return (
     <div className="mb-7">
-      <FormField id="booking-date" label="Alege ziua">
-        <Input
-          id="booking-date"
-          type="date"
-          value={date}
-          onFocus={(event) => {
-            event.currentTarget.min = bucharestDate();
-            event.currentTarget.max = bucharestDate(
-              new Date(Date.now() + booking.maximumDays * 86400000),
-            );
-          }}
-          onChange={(event) => void load(event.target.value)}
-          required
-          aria-describedby="booking-hours"
-        />
-        <p
-          id="booking-hours"
-          className="mt-2 text-xs leading-relaxed text-muted"
-        >
-          Luni–vineri · 10:00–18:00 · ora Bucureștiului. Minimum 4 ore înainte.
-        </p>
-      </FormField>
+      <DatePicker value={date} onChange={(value) => void load(value)} />
       {status === "loading" && (
         <p role="status" className="text-sm text-muted">
           Verificăm calendarul…
@@ -109,7 +82,10 @@ export default function SlotPicker({
       )}
       {status === "loaded" &&
         (slots.length ? (
-          <fieldset className="min-w-0">
+          <fieldset
+            key={date}
+            className="min-w-0 animate-enter motion-reduce:animate-none"
+          >
             <legend className="mb-3 text-[13px] text-label">Alege ora</legend>
             <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
               {slots.map((slot) => (
