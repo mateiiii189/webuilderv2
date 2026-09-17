@@ -150,61 +150,42 @@ test("logo stays stationary; button arrows move in the correct direction", async
   await expect(back.locator("svg")).toHaveCSS("translate", "-4px");
 });
 
-test("Contact validates fields, prepares an email draft, and preserves meeting notes", async ({
+test("Contact validates project enquiries and preserves notes when switching to booking", async ({
   page,
 }) => {
   await page.goto("/contact");
-  await page.getByRole("button", { name: "Continuă în e-mail" }).click();
-  await expect(page.getByRole("status")).toHaveCount(0);
-  await page.getByText("Discuție online", { exact: true }).click();
-  await expect(
-    page.getByRole("radio", { name: "Discuție online", exact: true }),
-  ).toBeChecked();
-  await expect(
-    page.getByRole("radio", { name: "Website", exact: true }),
-  ).toBeHidden();
-  await page
-    .getByLabel("Când ți-ar fi comod?", { exact: false })
-    .fill("Marți, după 14:00");
-  await page
+  const form = page.getByRole("form", { name: "Despre proiectul tău" });
+  await form.getByRole("button", { name: "Continuă în e-mail" }).click();
+  await expect(form.getByRole("status")).toHaveCount(0);
+  await form
     .getByLabel("Pe scurt, ideea ta", { exact: true })
     .fill("Un proiect de test & o idee nouă.");
-  await page.getByText("Despre proiect", { exact: true }).click();
-  await page.getByText("Automatizare", { exact: true }).click();
+  await form.getByText("Automatizare", { exact: true }).click();
   await page.getByText("Discuție online", { exact: true }).click();
+  await expect(page.getByLabel("Alege ziua")).toBeVisible();
+  await page.getByText("Despre proiect", { exact: true }).click();
   await expect(
-    page.getByLabel("Pe scurt, ideea ta", { exact: true }),
+    form.getByLabel("Pe scurt, ideea ta", { exact: true }),
   ).toHaveValue("Un proiect de test & o idee nouă.");
-  await page.getByLabel("Numele tău", { exact: true }).fill("Matei Test");
-  await page
+  await expect(form.getByRole("radio", { name: "Automatizare" })).toBeChecked();
+  await form.getByLabel("Numele tău", { exact: true }).fill("Matei Test");
+  await form
     .getByLabel("Adresa de e-mail", { exact: true })
     .fill("matei@example.test");
-  await page.getByRole("button", { name: "Continuă în e-mail" }).click();
-  await expect(page.getByRole("status")).toContainText(
+  await form.getByRole("button", { name: "Continuă în e-mail" }).click();
+  await expect(form.getByRole("status")).toContainText(
     "nu a fost trimis automat",
   );
-  const href = await page
+  const href = await form
     .getByRole("link", { name: "Deschide din nou e-mailul." })
     .getAttribute("href");
   expect(href).toContain("mailto:studio@example.test?");
   expect(decodeURIComponent(href!)).toContain(
     "Un proiect de test & o idee nouă.",
   );
-  expect(decodeURIComponent(href!)).toContain("Marți, după 14:00");
-  expect(decodeURIComponent(href!)).toContain("Discuție online");
-  expect(decodeURIComponent(href!)).not.toContain("Automatizare");
-  await page.getByText("Despre proiect", { exact: true }).click();
-  await expect(
-    page.getByRole("radio", { name: "Automatizare", exact: true }),
-  ).toBeChecked();
-  await page.getByRole("button", { name: "Continuă în e-mail" }).click();
-  const projectHref = await page
-    .getByRole("link", { name: "Deschide din nou e-mailul." })
-    .getAttribute("href");
-  expect(decodeURIComponent(projectHref!)).toContain("Automatizare");
-  expect(decodeURIComponent(projectHref!)).not.toContain("Marți, după 14:00");
-  await page.getByLabel("Numele tău", { exact: true }).fill("Matei Updated");
-  await expect(page.getByRole("status")).toHaveCount(0);
+  expect(decodeURIComponent(href!)).toContain("Automatizare");
+  await form.getByLabel("Numele tău", { exact: true }).fill("Matei Updated");
+  await expect(form.getByRole("status")).toHaveCount(0);
 });
 
 test("Contact navigation returns to a home section and consumes its query", async ({

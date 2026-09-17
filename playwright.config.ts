@@ -24,6 +24,18 @@ export default defineConfig({
     url: "http://127.0.0.1:3100",
     timeout: 120_000,
     reuseExistingServer: false,
-    env: { CONTACT_EMAIL: "studio@example.test" },
+    env: {
+      CONTACT_EMAIL: "studio@example.test",
+      // Always overwrite inherited credentials so tests cannot reach the live automation.
+      GOOGLE_APPS_SCRIPT_URL: process.env.BOOKING_INTEGRATION_TEST
+        ? "https://script.google.com/macros/s/webuilder-test/exec"
+        : "",
+      BOOKING_API_SECRET: process.env.BOOKING_INTEGRATION_TEST
+        ? "booking-test-secret-no-live-access"
+        : "",
+      ...(process.env.BOOKING_INTEGRATION_TEST
+        ? { NODE_OPTIONS: "--require ./tests/fixtures/apps-script.cjs" }
+        : {}),
+    },
   },
 });

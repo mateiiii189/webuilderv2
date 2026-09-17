@@ -12,7 +12,7 @@ const questions = [
       "Nu. Spune-ne ce face afacerea ta, ce ai vrea să schimbi și ce rezultat urmărești. Clarificăm împreună ce merită construit.",
   },
   {
-    title: "Ce discutăm în cele 30 de minute?",
+    title: "Ce discutăm în cele 60 de minute?",
     answer:
       "Ideea ta, publicul căruia te adresezi și ce ai deja. Discutăm prioritățile și întrebările tale, apoi stabilim dacă și cum putem continua.",
   },
@@ -88,7 +88,7 @@ export default function ContactExperience({ email }: { email: string }) {
                 className="text-[56px] leading-none font-medium tracking-heading text-primary sm:text-[72px]"
                 aria-hidden="true"
               >
-                30<span className="ml-1 text-xl">′</span>
+                60<span className="ml-1 text-xl">′</span>
               </span>
               <div>
                 <h2
@@ -99,8 +99,8 @@ export default function ContactExperience({ email }: { email: string }) {
                   <br />O direcție mai clară.
                 </h2>
                 <p className="mt-3 max-w-[31ch] text-sm leading-relaxed text-muted">
-                  Alege „Discuție online” în formular și stabilim împreună o
-                  întâlnire de 30 de minute.
+                  Alege „Discuție online”, selectează ora disponibilă și
+                  confirmă întâlnirea prin codul primit pe e-mail.
                 </p>
               </div>
             </div>
