@@ -156,15 +156,22 @@ test("Contact validates fields, prepares an email draft, and preserves meeting n
   await page.goto("/contact");
   await page.getByRole("button", { name: "Continuă în e-mail" }).click();
   await expect(page.getByRole("status")).toHaveCount(0);
-  await page.getByRole("button", { name: "Solicită o discuție" }).click();
+  await page.getByText("Discuție online", { exact: true }).click();
   await expect(
     page.getByRole("radio", { name: "Discuție online", exact: true }),
   ).toBeChecked();
-  await expect(page.getByLabel("Numele tău", { exact: true })).toBeFocused();
+  await expect(
+    page.getByRole("radio", { name: "Website", exact: true }),
+  ).toBeHidden();
+  await page
+    .getByLabel("Când ți-ar fi comod?", { exact: false })
+    .fill("Marți, după 14:00");
   await page
     .getByLabel("Pe scurt, ideea ta", { exact: true })
     .fill("Un proiect de test & o idee nouă.");
-  await page.getByRole("button", { name: "Solicită o discuție" }).click();
+  await page.getByText("Despre proiect", { exact: true }).click();
+  await page.getByText("Automatizare", { exact: true }).click();
+  await page.getByText("Discuție online", { exact: true }).click();
   await expect(
     page.getByLabel("Pe scurt, ideea ta", { exact: true }),
   ).toHaveValue("Un proiect de test & o idee nouă.");
@@ -183,6 +190,19 @@ test("Contact validates fields, prepares an email draft, and preserves meeting n
   expect(decodeURIComponent(href!)).toContain(
     "Un proiect de test & o idee nouă.",
   );
+  expect(decodeURIComponent(href!)).toContain("Marți, după 14:00");
+  expect(decodeURIComponent(href!)).toContain("Discuție online");
+  expect(decodeURIComponent(href!)).not.toContain("Automatizare");
+  await page.getByText("Despre proiect", { exact: true }).click();
+  await expect(
+    page.getByRole("radio", { name: "Automatizare", exact: true }),
+  ).toBeChecked();
+  await page.getByRole("button", { name: "Continuă în e-mail" }).click();
+  const projectHref = await page
+    .getByRole("link", { name: "Deschide din nou e-mailul." })
+    .getAttribute("href");
+  expect(decodeURIComponent(projectHref!)).toContain("Automatizare");
+  expect(decodeURIComponent(projectHref!)).not.toContain("Marți, după 14:00");
   await page.getByLabel("Numele tău", { exact: true }).fill("Matei Updated");
   await expect(page.getByRole("status")).toHaveCount(0);
 });

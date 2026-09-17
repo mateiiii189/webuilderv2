@@ -25,7 +25,7 @@ npm start
 ## What is implemented
 
 - Homepage: animated desktop W, mobile typography without the W, demonstration projects, services, process, and Contact CTA.
-- Contact page: project enquiry form, meeting enquiry, and next steps.
+- Contact page: project/meeting enquiry selector, direct email, meeting hours, and three common questions. The layout puts the form immediately after the introduction on mobile.
 - Shared header, accessible native mobile dialog, footer, and 404 page.
 - Shared primary/secondary buttons with forward/back arrows, form fields, headings, accordion, and replayable reveals.
 - Instant section navigation followed by reveal animations. Normal clicks do not add URL hashes. Keyboard navigation moves focus appropriately; mouse clicks do not focus whole sections. Reload and Back/Forward scroll restoration use the browser's default behavior.
@@ -71,7 +71,7 @@ Content and layouts stay server-rendered where possible. Client components are u
 
 The form prepares a draft in the visitor's email application. It does **not** send email automatically. If `CONTACT_EMAIL` is missing, submission is disabled with an honest availability message. The status after submission explicitly says the message was not sent automatically.
 
-“Solicită o discuție” selects a meeting enquiry and preserves any existing project notes. It does **not** reserve a time or create a Google Meet event.
+“Discuție online” switches the form to a 30-minute meeting enquiry, with an optional preferred time. Switching modes preserves the entered contact details and project notes. Project emails omit meeting availability; meeting emails omit the project service selection. This does **not** reserve a time or create a Google Meet event. The page copy and FAQ render on the server; only the form and shared animation components need client-side interaction.
 
 The next integration is the existing Google Apps Script meeting system: availability, email PIN confirmation, then Calendar/Meet creation. The current deployed script and request/response contract must be confirmed first. Future credentials belong in server-only environment variables and calls should pass through Next.js Route Handlers. Do not put API secrets in `NEXT_PUBLIC_` variables.
 
