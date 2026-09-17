@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { reloadScrollScript } from "@/lib/reload-scroll";
 
 import "@fontsource-variable/manrope/wght.css";
 import "./globals.css";
@@ -16,9 +15,6 @@ export default function RootLayout({
 }: Readonly<{ children: ReactNode }>) {
   return (
     <html lang="ro">
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: reloadScrollScript }} />
-      </head>
       <body>{children}</body>
     </html>
   );
