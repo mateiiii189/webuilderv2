@@ -3,7 +3,6 @@ import TextEntrance from "@/components/ui/TextEntrance";
 import ContactForm from "./ContactForm";
 import AccordionItem from "@/components/ui/AccordionItem";
 import Reveal from "@/components/ui/Reveal";
-import { textLink } from "@/lib/ui";
 
 const kicker = "text-kicker tracking-kicker text-muted";
 
@@ -53,28 +52,33 @@ export default function ContactExperience({
             Un website, o aplicație sau un mod mai simplu de a lucra. Începem cu
             ce contează pentru afacerea ta.
           </p>
-          {email && (
-            <a
-              href={`mailto:${email}`}
-              className={`${textLink} mt-5 inline-flex animate-enter items-center gap-4 text-sm wrap-anywhere [animation-delay:550ms] motion-reduce:animate-none`}
+          {(email || whatsappUrl) && (
+            <div
+              role="group"
+              aria-label="Contact direct"
+              className="mt-7 grid max-w-sm animate-enter grid-cols-1 gap-3 [animation-delay:550ms] motion-reduce:animate-none min-[360px]:grid-cols-2 lg:mt-8"
             >
-              {email}
-              <span aria-hidden="true">↗</span>
-            </a>
-          )}
-          {whatsappUrl && (
-            <div className="mt-6 animate-enter [animation-delay:650ms] motion-reduce:animate-none">
-              <Button
-                href={whatsappUrl}
-                variant="secondary"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Scrie-ne pe WhatsApp
-              </Button>
-              <p className="mt-3 text-xs leading-relaxed text-muted">
-                Preferi un mesaj? Povestește-ne direct despre ideea ta.
-              </p>
+              {email && (
+                <Button
+                  href={`mailto:${email}`}
+                  variant="secondary"
+                  title={email}
+                  className="w-full justify-between gap-3 px-4"
+                >
+                  E-mail
+                </Button>
+              )}
+              {whatsappUrl && (
+                <Button
+                  href={whatsappUrl}
+                  variant="secondary"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full justify-between gap-3 px-4"
+                >
+                  WhatsApp
+                </Button>
+              )}
             </div>
           )}
         </Reveal>
