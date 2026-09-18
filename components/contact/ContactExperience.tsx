@@ -41,13 +41,30 @@ export default function ContactExperience({
             <span className="h-px w-6 bg-primary" aria-hidden="true" />
             CONTACT / WEBUILDER
           </p>
-          <h1 className="text-hero-mobile leading-[1.065] font-medium tracking-hero lg:text-hero lg:leading-[1.07] lg:[@media(max-height:820px)]:text-[clamp(60px,6.3vw,102.4px)]">
-            <TextEntrance delay={120}>Ai o idee?</TextEntrance>
-            <TextEntrance delay={250}>Hai s-o</TextEntrance>
-            <TextEntrance delay={380}>
-              <span className="text-primary">construim.</span>
-            </TextEntrance>
-          </h1>
+          <div className="@container/contact-heading text-hero-mobile leading-[1.065] font-medium tracking-hero lg:text-hero lg:leading-[1.07] lg:[@media(max-height:820px)]:text-[clamp(60px,6.3vw,102.4px)]">
+            {/* Measure line layouts against the available width and headline size. */}
+            <h1>
+              <span className="block @[6.4em]/contact-heading:hidden">
+                <TextEntrance delay={120}>Ai o idee?</TextEntrance>
+                <TextEntrance delay={250}>Hai să o</TextEntrance>
+                <TextEntrance delay={380}>
+                  <span className="text-primary">construim.</span>
+                </TextEntrance>
+              </span>
+              <span className="hidden @[6.4em]/contact-heading:block @[7.25em]/contact-heading:hidden">
+                <TextEntrance delay={120}>Ai o idee? Hai</TextEntrance>
+                <TextEntrance delay={250}>
+                  să o <span className="text-primary">construim.</span>
+                </TextEntrance>
+              </span>
+              <span className="hidden @[7.25em]/contact-heading:block">
+                <TextEntrance delay={120}>Ai o idee? Hai să o</TextEntrance>
+                <TextEntrance delay={250}>
+                  <span className="text-primary">construim.</span>
+                </TextEntrance>
+              </span>
+            </h1>
+          </div>
           <p className="mt-6 max-w-[36ch] animate-enter text-[15px] leading-relaxed text-muted [animation-delay:450ms] motion-reduce:animate-none min-[440px]:max-lg:mt-5 min-[440px]:max-lg:max-w-[58ch] sm:text-base lg:mt-8">
             Un website, o aplicație sau un mod mai simplu de a lucra. Începem cu
             ce contează pentru afacerea ta.
@@ -63,7 +80,7 @@ export default function ContactExperience({
                   <p className="mb-2 text-kicker tracking-kicker text-muted">
                     E-MAIL DIRECT
                   </p>
-                  <p className="inline-flex min-h-control w-fit max-w-full items-center rounded-control bg-transparent px-[22px] py-[13px] text-sm leading-normal font-medium [overflow-wrap:anywhere] text-foreground select-text">
+                  <p className="max-w-full text-sm leading-normal font-medium [overflow-wrap:anywhere] text-foreground select-text">
                     {email}
                   </p>
                 </div>
