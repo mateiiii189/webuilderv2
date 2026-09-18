@@ -109,3 +109,5 @@ The Contact page displays the email address and a “Telefon” number as select
 Before configuring Sanity, the two local demonstration concepts remain available. Once configured, Sanity is the only content source; an empty dataset shows an empty portfolio. Failures display a retry state rather than substituting demonstration content. Routine content reads revalidate after 60 seconds on subsequent requests; no rebuild is required for new project pages.
 
 Run `npx playwright test tests/projects.spec.ts` for the unconfigured demonstration flow, and `npm run test:sanity` for mocked published-content, incremental loading, retries, images, and featured-project checks. Both test runs replace inherited CMS credentials and never write to Sanity.
+
+To populate Sanity with 15 labelled demo projects, follow the [seed instructions](docs/sanity.md#seed-15-demo-projects) and run `npm run seed:projects`. The script preserves existing documents and requires a local Editor token.

@@ -44,6 +44,37 @@ The portfolio sorts by date, newest first, with document ID as a stable tiebreak
 - Images use Sanity transformations and Next image optimization, responsive sizes, and lazy loading.
 - New detail pages are generated on demand. A large portfolio does not require building every project in advance.
 
+## Seed 15 demo projects
+
+The script creates **published concepts**, with locally generated PNG covers and sample Romanian case-study copy. These are clearly marked as demonstrations with no real client. Existing projects, drafts, matching slugs, and homepage selections are preserved. Stable IDs (`webuilder-demo-01` through `webuilder-demo-15`) make reruns safe; edited seed documents are not overwritten.
+
+1. In Sanity Manage → your project → API → Tokens, create an **Editor** token.
+2. Add it only to your local `.env.local`:
+
+```dotenv
+SANITY_API_WRITE_TOKEN=your_editor_token
+```
+
+Keep your existing `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET` values. The public website does not need this write token. Do not commit it or prefix it with `NEXT_PUBLIC`.
+
+```bash
+# Optional local preview: no Sanity requests or writes.
+npm run seed:projects -- --dry-run
+
+# Upload covers and create the missing demo projects in the configured dataset.
+npm run seed:projects
+```
+
+Open `/proiecte` after the cache updates. An otherwise empty dataset will show 4 → 8 → 12 → 15 projects as you click **Arată mai multe**. The demos are not automatically featured on the homepage; choose those in Studio if wanted. Once finished seeding, remove the write token from `.env.local` and revoke it in Sanity if you no longer need it.
+
+To remove the demos later, delete the documents with the above IDs in Studio. The script does not delete anything. Re-running after deleting a demo recreates it. Uploaded image assets may remain if an upload or final transaction fails; rerun to finish creating the missing projects.
+
+Local checks (no credentials or live writes):
+
+```bash
+node --test tests/seed-projects.test.mjs
+```
+
 ## Cache behavior
 
 Published-content reads use a 60-second Next.js cache and the Sanity origin API. When the cache expires, a subsequent visit triggers revalidation, so an edit can take a little longer than one minute to appear. New project URLs are available on demand; do not expect every already-open browser tab to update automatically. No revalidation webhook or exposed write credential is required.

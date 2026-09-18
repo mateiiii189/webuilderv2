@@ -12,7 +12,8 @@
     "format:check": "prettier --check .",
     "test:e2e": "playwright test",
     "test:booking": "BOOKING_INTEGRATION_TEST=1 playwright test",
-    "test:sanity": "SANITY_INTEGRATION_TEST=1 playwright test tests/sanity.spec.ts"
+    "test:sanity": "SANITY_INTEGRATION_TEST=1 playwright test tests/sanity.spec.ts",
+    "seed:projects": "node --env-file-if-exists=.env.local scripts/seed-projects.mjs"
   },
   "dependencies": {
     "@fontsource-variable/manrope": "^5.3.0",
