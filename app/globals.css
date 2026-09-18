@@ -46,6 +46,16 @@
   --animate-hero: enter 1000ms var(--ease-entrance) var(--delay, 0ms) both;
   --animate-fade: fade-in 1000ms ease var(--delay, 0ms) both;
   --animate-menu: enter 240ms var(--ease-entrance) both;
+  --animate-project-enter: enter 1100ms var(--ease-brand) both;
+  --animate-project-expand: project-expand 1100ms var(--ease-brand) both;
+  @keyframes project-expand {
+    from {
+      grid-template-rows: 0fr;
+    }
+    to {
+      grid-template-rows: 1fr;
+    }
+  }
   @keyframes fade-in {
     from {
       opacity: 0;

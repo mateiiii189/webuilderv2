@@ -7,7 +7,7 @@ import Reveal from "@/components/ui/Reveal";
 import ProjectCard from "./ProjectCard";
 
 export default function ProjectGrid({ initial }: { initial: ProjectBatch }) {
-  const [projects, setProjects] = useState(initial.items);
+  const [batches, setBatches] = useState([initial.items]);
   const [next, setNext] = useState(initial.next);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -25,12 +25,12 @@ export default function ProjectGrid({ initial }: { initial: ProjectBatch }) {
       );
       if (!response.ok) throw new Error("Projects unavailable");
       const batch: ProjectBatch = await response.json();
-      setProjects((current) => {
-        const existing = new Set(current.map((project) => project._id));
-        return [
-          ...current,
-          ...batch.items.filter((project) => !existing.has(project._id)),
-        ];
+      setBatches((current) => {
+        const existing = new Set(current.flat().map((project) => project._id));
+        const additions = batch.items.filter(
+          (project) => !existing.has(project._id),
+        );
+        return additions.length ? [...current, additions] : current;
       });
       setNext(batch.next);
       setAnnouncement(
@@ -46,7 +46,7 @@ export default function ProjectGrid({ initial }: { initial: ProjectBatch }) {
     }
   }
 
-  if (!projects.length) {
+  if (!batches[0].length) {
     return (
       <div className="rounded-card border border-border px-6 py-12 sm:px-9">
         <h3 className="text-2xl font-medium tracking-heading">
@@ -65,23 +65,37 @@ export default function ProjectGrid({ initial }: { initial: ProjectBatch }) {
 
   return (
     <>
-      <div
-        id="project-grid"
-        aria-busy={loading}
-        className="grid items-start gap-9 sm:grid-cols-2 sm:gap-6 lg:gap-9"
-      >
-        {projects.map((project, index) => (
-          <Reveal key={project._id}>
-            <div
-              className={
-                index >= initial.items.length
-                  ? "animate-enter motion-reduce:animate-none"
-                  : undefined
-              }
-            >
-              <ProjectCard project={project} />
+      <div id="project-grid" aria-busy={loading}>
+        {batches.map((batch, batchIndex) => (
+          <div
+            key={batch[0]._id}
+            className={`-mx-1 grid grid-rows-[1fr] ${batchIndex > 0 ? "animate-project-expand motion-reduce:animate-none" : ""}`}
+          >
+            <div className="min-h-0 overflow-hidden px-1">
+              <div
+                className={`grid items-start gap-9 pb-1 sm:grid-cols-2 sm:gap-6 lg:gap-9 ${batchIndex > 0 ? "pt-8 sm:pt-5 lg:pt-8" : "pt-1"}`}
+              >
+                {batch.map((project, index) => (
+                  <Reveal key={project._id}>
+                    <div
+                      className={
+                        batchIndex > 0
+                          ? "animate-project-enter motion-reduce:animate-none"
+                          : undefined
+                      }
+                      style={
+                        batchIndex > 0
+                          ? { animationDelay: `${index * 120}ms` }
+                          : undefined
+                      }
+                    >
+                      <ProjectCard project={project} />
+                    </div>
+                  </Reveal>
+                ))}
+              </div>
             </div>
-          </Reveal>
+          </div>
         ))}
       </div>
       <p className="sr-only" role="status">
