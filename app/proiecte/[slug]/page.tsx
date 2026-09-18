@@ -45,7 +45,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   return (
     <PageShell key={project._id} innerPage>
       <section
-        className="pt-7 pb-10 sm:pt-10 sm:pb-14 lg:pt-12 lg:pb-18"
+        className="pt-7 sm:pt-10 lg:pt-12"
         aria-labelledby="project-title"
       >
         <Button
@@ -56,88 +56,94 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         >
           Toate proiectele
         </Button>
-        <Reveal className="mt-10 lg:mt-14">
-          <p className="mb-6 animate-enter text-kicker tracking-kicker text-muted motion-reduce:animate-none">
-            {project.isConcept ? "CONCEPT DEMONSTRATIV" : "PROIECT / WEBUILDER"}
-          </p>
-          <h1
-            id="project-title"
-            className="text-[clamp(36px,10vw,40px)] leading-[1.08] font-medium tracking-hero sm:text-[clamp(44px,7.3vw,112px)]"
-          >
-            {project.headline.map((line, index) => (
-              <TextEntrance key={index} delay={120 + index * 130}>
-                <span
-                  className={`block wrap-anywhere ${index ? "text-primary" : ""}`}
-                >
-                  {line}
-                </span>
-              </TextEntrance>
-            ))}
-          </h1>
-          <div className="mt-8 grid animate-enter gap-7 border-t border-border pt-6 [animation-delay:450ms] motion-reduce:animate-none lg:mt-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-            <p className="max-w-[48ch] text-base leading-relaxed text-muted">
-              {project.summary}
+        <div className="mt-8 grid gap-7 sm:mt-10 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] xl:grid-rows-[min-content_1fr] xl:items-start xl:gap-x-[clamp(32px,4vw,72px)] xl:gap-y-6">
+          <Reveal className="xl:col-start-2 xl:row-start-1">
+            <p className="mb-4 animate-enter text-kicker tracking-kicker text-muted motion-reduce:animate-none">
+              {project.isConcept
+                ? "CONCEPT DEMONSTRATIV"
+                : "PROIECT / WEBUILDER"}
             </p>
-            <dl className="grid grid-cols-2 gap-6 text-sm">
-              <div>
-                <dt className="mb-2 text-kicker tracking-kicker text-muted">
-                  DISCIPLINE
-                </dt>
-                <dd className="leading-relaxed text-soft">
-                  {project.category}
-                </dd>
-              </div>
-              <div>
-                <dt className="mb-2 text-kicker tracking-kicker text-muted">
-                  STATUT
-                </dt>
-                <dd className="leading-relaxed text-soft">
-                  {project.isConcept ? (
-                    <>
-                      Explorare de design
-                      <br />
-                      Fără client asociat
-                    </>
-                  ) : (
-                    project.clientName || "Proiect Webuilder"
-                  )}
-                </dd>
-              </div>
-            </dl>
-          </div>
-          {project.liveUrl && /^https:\/\//.test(project.liveUrl) && (
-            <div className="mt-7 animate-enter [animation-delay:550ms] motion-reduce:animate-none">
-              <Button
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="secondary"
-              >
-                Vezi website-ul
-              </Button>
+            <h1
+              id="project-title"
+              className="text-[clamp(36px,10vw,44px)] leading-[1.08] font-medium tracking-hero sm:text-[52px] xl:text-[clamp(40px,3.8vw,64px)]"
+            >
+              {project.headline.map((line, index) => (
+                <TextEntrance key={index} delay={120 + index * 130}>
+                  <span
+                    className={`block wrap-anywhere ${index ? "text-primary" : ""}`}
+                  >
+                    {line}
+                  </span>
+                </TextEntrance>
+              ))}
+            </h1>
+          </Reveal>
+          <Reveal className="xl:col-start-1 xl:row-span-2 xl:row-start-1">
+            {project.homepagePreview?.asset?._ref ? (
+              <ProjectHomepagePreview
+                image={project.homepagePreview}
+                title={project.title}
+                liveUrl={project.liveUrl}
+              />
+            ) : (
+              <figure className="mx-auto max-w-[1000px] animate-enter [animation-delay:250ms] motion-reduce:animate-none">
+                <ProjectCover project={project} presentation="detail" />
+                <figcaption className="mt-5 border-t border-border pt-4 text-xs leading-relaxed text-muted">
+                  {project.cover?.caption ||
+                    (project.isConcept
+                      ? `${project.title} — interfață demonstrativă. Datele și elementele vizuale sunt ilustrative.`
+                      : project.title)}
+                </figcaption>
+              </figure>
+            )}
+          </Reveal>
+          <Reveal className="xl:col-start-2 xl:row-start-2">
+            <div className="grid animate-enter gap-6 [animation-delay:450ms] motion-reduce:animate-none">
+              <p className="max-w-[48ch] text-base leading-relaxed text-muted">
+                {project.summary}
+              </p>
+              <dl className="grid grid-cols-2 gap-5 border-t border-border pt-6 text-sm">
+                <div>
+                  <dt className="mb-2 text-kicker tracking-kicker text-muted">
+                    DISCIPLINE
+                  </dt>
+                  <dd className="leading-relaxed text-soft">
+                    {project.category}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="mb-2 text-kicker tracking-kicker text-muted">
+                    STATUT
+                  </dt>
+                  <dd className="leading-relaxed text-soft">
+                    {project.isConcept ? (
+                      <>
+                        Explorare de design
+                        <br />
+                        Fără client asociat
+                      </>
+                    ) : (
+                      project.clientName || "Proiect Webuilder"
+                    )}
+                  </dd>
+                </div>
+              </dl>
             </div>
-          )}
-        </Reveal>
+            {project.liveUrl && /^https:\/\//.test(project.liveUrl) && (
+              <div className="mt-7 animate-enter [animation-delay:550ms] motion-reduce:animate-none">
+                <Button
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="secondary"
+                >
+                  Vezi website-ul
+                </Button>
+              </div>
+            )}
+          </Reveal>
+        </div>
       </section>
-      <Reveal>
-        {project.homepagePreview?.asset?._ref ? (
-          <ProjectHomepagePreview
-            image={project.homepagePreview}
-            title={project.title}
-            liveUrl={project.liveUrl}
-          />
-        ) : (
-          <figure className="mx-auto max-w-[1000px] animate-enter [animation-delay:250ms] motion-reduce:animate-none">
-            <ProjectCover project={project} presentation="detail" />
-            <figcaption className="mt-5 border-t border-border pt-4 text-xs leading-relaxed text-muted">
-              {project.cover?.caption ||
-                (project.isConcept
-                  ? `${project.title} — interfață demonstrativă. Datele și elementele vizuale sunt ilustrative.`
-                  : project.title)}
-            </figcaption>
-          </figure>
-        )}
-      </Reveal>
       <section
         className={`${sectionSpacing} grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16`}
         aria-labelledby="direction-title"
