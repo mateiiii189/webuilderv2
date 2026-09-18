@@ -220,7 +220,7 @@ test("Contact navigation returns to a home section and consumes its query", asyn
   await page.goto("/contact");
   await page
     .getByRole("navigation", { name: "Navigație principală", exact: true })
-    .getByRole("link", { name: "Proces", exact: true })
+    .getByRole("link", { name: "Servicii", exact: true })
     .click();
   await expect
     .poll(
@@ -233,7 +233,7 @@ test("Contact navigation returns to a home section and consumes its query", asyn
   await expect
     .poll(() =>
       page
-        .locator("#proces")
+        .locator("#servicii")
         .evaluate((el) => Math.round(el.getBoundingClientRect().top)),
     )
     .toBe(116);

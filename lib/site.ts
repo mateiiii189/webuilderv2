@@ -11,15 +11,15 @@ export const site = {
 export const navigation = [
   { label: "Proiecte", id: "proiecte" },
   { label: "Servicii", id: "servicii" },
-  { label: "Proces", id: "proces" },
+  { label: "Blog", id: "blog" },
 ] as const;
 
 export function navigationFor(innerPage: boolean) {
   return navigation.map(({ label, id }) => ({
     label,
     href:
-      id === "proiecte"
-        ? "/proiecte"
+      id === "proiecte" || id === "blog"
+        ? `/${id}`
         : innerPage
           ? `/?section=${id}`
           : `#${id}`,

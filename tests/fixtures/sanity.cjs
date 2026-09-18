@@ -62,6 +62,120 @@ const dataset = [
     featured: true,
   },
 ];
+const articleBody = [
+  {
+    _type: "block",
+    _key: "intro",
+    style: "normal",
+    children: [
+      {
+        _type: "span",
+        _key: "s1",
+        text: "Un website bun începe cu întrebările potrivite. ",
+        marks: [],
+      },
+      {
+        _type: "span",
+        _key: "s2",
+        text: "Hai să discutăm.",
+        marks: ["contact"],
+      },
+    ],
+    markDefs: [{ _type: "link", _key: "contact", href: "/contact" }],
+  },
+  {
+    _type: "block",
+    _key: "goals",
+    style: "h2",
+    children: [
+      { _type: "span", _key: "s", text: "Începe cu obiectivul", marks: [] },
+    ],
+    markDefs: [],
+  },
+  {
+    _type: "block",
+    _key: "p1",
+    style: "normal",
+    children: [
+      {
+        _type: "span",
+        _key: "s",
+        text: "Clarifică obiectivul afacerii și acțiunea pe care o aștepți de la vizitator. ".repeat(
+          20,
+        ),
+        marks: [],
+      },
+    ],
+    markDefs: [],
+  },
+  {
+    _type: "block",
+    _key: "measure",
+    style: "h2",
+    children: [
+      { _type: "span", _key: "s", text: "Măsoară ce contează", marks: [] },
+    ],
+    markDefs: [],
+  },
+  {
+    _type: "block",
+    _key: "list1",
+    style: "normal",
+    listItem: "bullet",
+    level: 1,
+    children: [
+      {
+        _type: "span",
+        _key: "s",
+        text: "Urmărește cererile de ofertă.",
+        marks: [],
+      },
+    ],
+    markDefs: [],
+  },
+  { ...image, _key: "inline-image" },
+  {
+    _type: "block",
+    _key: "unsafe",
+    style: "normal",
+    children: [
+      { _type: "span", _key: "s", text: "Link invalid", marks: ["bad"] },
+    ],
+    markDefs: [{ _type: "link", _key: "bad", href: "javascript:alert(1)" }],
+  },
+];
+const makeArticle = (index) => ({
+  _id: `article-${String(index).padStart(2, "0")}`,
+  _type: "article",
+  slug: { current: `articol-test-${index}` },
+  title:
+    index === 8
+      ? "Ce face un website să lucreze pentru afacerea ta?"
+      : `Perspectiva ${index}: design cu un scop clar`,
+  excerpt:
+    "De la prima impresie la cererea de ofertă. Cum construiești o experiență digitală care are sens pentru clienții tăi.",
+  category: "Web design",
+  cover: image,
+  publishedAt: "2025-01-01T10:00:00.000Z",
+  _updatedAt: "2025-01-02T10:00:00.000Z",
+  body: articleBody,
+  seoTitle: "Website-uri care ajută afacerea",
+  seoDescription: "Ghid Webuilder pentru un website clar și util.",
+});
+dataset.push(
+  ...Array.from({ length: 9 }, (_, i) => makeArticle(i)),
+  {
+    ...makeArticle(20),
+    _id: "drafts.article-hidden",
+    slug: { current: "articol-draft" },
+  },
+  {
+    ...makeArticle(21),
+    slug: { current: "articol-viitor" },
+    publishedAt: "2999-01-01T00:00:00.000Z",
+  },
+  { ...makeArticle(22), slug: { current: "articol-gol" }, body: [] },
+);
 globalThis.fetch = async function (input, init) {
   const url = new URL(
     typeof input === "string" ? input : input.url || String(input),
