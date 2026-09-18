@@ -41,19 +41,12 @@ export default function ContactExperience({
             <span className="h-px w-6 bg-primary" aria-hidden="true" />
             CONTACT / WEBUILDER
           </p>
-          <h1 className="text-[clamp(46px,11vw,76px)] leading-[1.06] font-medium tracking-hero min-[440px]:max-lg:text-[clamp(38px,7.4vw,64px)] lg:text-[clamp(58px,5.9vw,96px)]">
+          <h1 className="text-hero-mobile leading-[1.065] font-medium tracking-hero lg:text-hero lg:leading-[1.07] lg:[@media(max-height:820px)]:text-[clamp(60px,6.3vw,102.4px)]">
             <TextEntrance delay={120}>Ai o idee?</TextEntrance>
-            <span className="hidden min-[440px]:max-lg:block">
-              <TextEntrance delay={250}>
-                Hai s-o <span className="text-primary">construim.</span>
-              </TextEntrance>
-            </span>
-            <span className="min-[440px]:max-lg:hidden">
-              <TextEntrance delay={250}>Hai s-o</TextEntrance>
-              <TextEntrance delay={380}>
-                <span className="text-primary">construim.</span>
-              </TextEntrance>
-            </span>
+            <TextEntrance delay={250}>Hai s-o</TextEntrance>
+            <TextEntrance delay={380}>
+              <span className="text-primary">construim.</span>
+            </TextEntrance>
           </h1>
           <p className="mt-6 max-w-[36ch] animate-enter text-[15px] leading-relaxed text-muted [animation-delay:450ms] motion-reduce:animate-none min-[440px]:max-lg:mt-5 min-[440px]:max-lg:max-w-[58ch] sm:text-base lg:mt-8">
             Un website, o aplicație sau un mod mai simplu de a lucra. Începem cu
