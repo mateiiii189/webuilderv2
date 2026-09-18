@@ -35,11 +35,11 @@ export default function ProjectHomepagePreview({
         <div className="flex max-w-full min-w-0 flex-1 items-center gap-4">
           <span
             aria-hidden="true"
-            className="hidden shrink-0 gap-1.5 sm:flex [&>i]:size-1.5 [&>i]:rounded-full [&>i]:bg-field-border"
+            className="flex shrink-0 gap-1.5 [&>i]:size-2 [&>i]:rounded-full"
           >
-            <i />
-            <i />
-            <i />
+            <i className="bg-[#ff5f57]" />
+            <i className="bg-[#febc2e]" />
+            <i className="bg-[#28c840]" />
           </span>
           <span className="min-w-0 truncate text-xs text-muted">
             {website

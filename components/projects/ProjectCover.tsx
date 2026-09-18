@@ -23,13 +23,15 @@ export function ProjectGalleryImage({
   const src =
     presentation === "card"
       ? builder.width(1400).height(875).fit("crop").url()
-      : builder.width(2000).fit("max").url();
+      : presentation === "featured"
+        ? builder.width(1400).height(1050).fit("crop").url()
+        : builder.image(image.asset).width(2000).fit("max").url();
   const placeholder = image.lqip ? "blur" : "empty";
 
   if (presentation === "featured") {
     return (
       <div
-        className={`relative grid aspect-[1.25] max-h-[520px] place-items-center overflow-hidden p-[clamp(16px,3vw,48px)] sm:aspect-[4/3] ${tone === "warm" ? "bg-[#343b31]" : "bg-[#202e3b]"}`}
+        className={`relative grid aspect-[1.25] max-h-[520px] w-full place-items-center overflow-hidden p-[clamp(16px,3vw,48px)] sm:aspect-[4/3] ${tone === "warm" ? "bg-[#343b31]" : "bg-[#202e3b]"}`}
       >
         <div
           aria-hidden="true"
@@ -40,11 +42,11 @@ export function ProjectGalleryImage({
         >
           <div
             aria-hidden="true"
-            className="flex h-6 items-center gap-1 border-b border-[#0000001a] px-3 sm:h-8 [&>i]:size-1 [&>i]:rounded-full [&>i]:bg-[#00000040]"
+            className="flex h-6 items-center gap-1.5 border-b border-[#0000001a] px-3 sm:h-8 [&>i]:size-1.5 [&>i]:shrink-0 [&>i]:rounded-full sm:[&>i]:size-2"
           >
-            <i />
-            <i />
-            <i />
+            <i className="bg-[#ff5f57]" />
+            <i className="bg-[#febc2e]" />
+            <i className="bg-[#28c840]" />
             <span className="mx-auto h-1 w-1/3 rounded-full bg-[#0000001a]" />
           </div>
           <div className="relative aspect-[4/3] bg-[#0d0d0c]">
@@ -55,7 +57,7 @@ export function ProjectGalleryImage({
               sizes="(max-width: 600px) 75vw, (max-width: 1920px) 38vw, 700px"
               placeholder={placeholder}
               blurDataURL={image.lqip}
-              className="object-contain"
+              className="object-cover"
             />
           </div>
         </div>
@@ -81,29 +83,39 @@ export function ProjectGalleryImage({
 
   return (
     <a
-      href={builder.url()}
+      href={builder.image(image.asset).url()}
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`Deschide ${image.alt || "imaginea proiectului"} — în mărime completă (filă nouă)`}
-      className="group/image block bg-surface p-3 focus-visible:-outline-offset-4 sm:p-6 lg:p-8"
+      className="group/image relative mx-auto block w-fit max-w-full overflow-hidden rounded-control focus-visible:-outline-offset-4"
     >
-      <div className="relative mx-auto h-[clamp(240px,48vw,560px)] max-h-[72svh] w-full max-w-[1000px]">
-        <Image
-          src={src}
-          alt={image.alt || ""}
-          fill
-          sizes="(max-width: 1100px) 85vw, 1000px"
-          placeholder={placeholder}
-          blurDataURL={image.lqip}
-          className="object-contain"
-        />
-        <span
-          className="absolute right-3 bottom-3 rounded-control border border-[#ffffff26] bg-[#000000bf] px-3 py-2 text-xs text-[#ffffff] transition-colors duration-500 group-hover/image:text-primary group-focus-visible/image:text-primary motion-reduce:transition-none"
-          aria-hidden="true"
+      <Image
+        src={src}
+        alt={image.alt || ""}
+        width={image.width || 1600}
+        height={image.height || 1000}
+        sizes="(max-width: 1100px) 85vw, 1000px"
+        placeholder={placeholder}
+        blurDataURL={image.lqip}
+        className="block h-auto max-h-[min(560px,72svh)] w-auto max-w-full object-contain"
+      />
+      <span
+        className="absolute right-3 bottom-3 grid size-10 place-items-center rounded-control bg-[#050505b3] text-foreground backdrop-blur-sm transition-colors duration-500 group-hover/image:bg-primary group-hover/image:text-background group-focus-visible/image:bg-primary group-focus-visible/image:text-background motion-reduce:transition-none"
+        aria-hidden="true"
+      >
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
-          Vezi imaginea completă ↗
-        </span>
-      </div>
+          <path d="M8 3H3v5M16 3h5v5M21 16v5h-5M8 21H3v-5" />
+        </svg>
+      </span>
     </a>
   );
 }

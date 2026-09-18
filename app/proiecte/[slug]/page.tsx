@@ -127,9 +127,9 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             liveUrl={project.liveUrl}
           />
         ) : (
-          <figure className="mx-auto max-w-[1200px] animate-enter overflow-hidden rounded-card border border-border [animation-delay:250ms] motion-reduce:animate-none">
+          <figure className="mx-auto max-w-[1000px] animate-enter [animation-delay:250ms] motion-reduce:animate-none">
             <ProjectCover project={project} presentation="detail" />
-            <figcaption className="border-t border-border px-5 py-4 text-xs leading-relaxed text-muted sm:px-7">
+            <figcaption className="mt-5 border-t border-border pt-4 text-xs leading-relaxed text-muted">
               {project.cover?.caption ||
                 (project.isConcept
                   ? `${project.title} — interfață demonstrativă. Datele și elementele vizuale sunt ilustrative.`
@@ -185,10 +185,10 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             .filter((image) => image.asset?._ref)
             .map((image, index) => (
               <Reveal key={index}>
-                <figure className="mx-auto w-full max-w-[1200px] overflow-hidden rounded-card border border-border bg-surface">
+                <figure className="mx-auto w-full max-w-[1000px]">
                   <ProjectGalleryImage image={image} />
                   {image.caption && (
-                    <figcaption className="border-t border-border px-5 py-4 text-xs leading-relaxed text-muted">
+                    <figcaption className="mt-5 border-t border-border pt-4 text-xs leading-relaxed text-muted">
                       {image.caption}
                     </figcaption>
                   )}
