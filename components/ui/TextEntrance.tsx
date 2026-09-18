@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 
 /** Uses the same masked entrance and timing as the homepage hero. */
 export default function TextEntrance({
@@ -12,7 +12,7 @@ export default function TextEntrance({
     <span className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
       <span
         className="block animate-title motion-reduce:animate-none"
-        style={{ "--delay": `${delay}ms` } as CSSProperties}
+        style={{ animationDelay: `${delay}ms` }}
       >
         {children}
       </span>

@@ -15,19 +15,32 @@ export function ProjectGalleryImage({
     .image(image)
     .auto("format")
     .quality(85);
-  const src = builder.width(1600).fit("max").url();
+  const src = builder
+    .width(cover ? 1600 : 2400)
+    .fit("max")
+    .url();
+  const width = Math.max(
+    1,
+    Math.round(
+      (image.width || 1600) *
+        (1 - (image.crop?.left || 0) - (image.crop?.right || 0)),
+    ),
+  );
+  const height = Math.max(
+    1,
+    Math.round(
+      (image.height || 1200) *
+        (1 - (image.crop?.top || 0) - (image.crop?.bottom || 0)),
+    ),
+  );
   return (
-    <div
-      className={
-        cover
-          ? "relative aspect-video max-h-80 w-full"
-          : "relative h-[clamp(220px,50vw,520px)] max-h-[65svh] w-full"
-      }
-    >
+    <div className={cover ? "relative aspect-video max-h-80 w-full" : "w-full"}>
       <Image
         src={src}
         alt={image.alt || ""}
-        fill
+        fill={cover}
+        width={cover ? undefined : width}
+        height={cover ? undefined : height}
         sizes={
           cover
             ? "(max-width: 600px) 90vw, (max-width: 1920px) 45vw, 840px"
@@ -38,7 +51,7 @@ export function ProjectGalleryImage({
         className={
           cover
             ? "object-contain transition-transform duration-500 ease-in-out motion-safe:group-hover/preview:scale-[1.025] motion-reduce:transition-none"
-            : "object-contain"
+            : "block h-auto w-full"
         }
       />
     </div>

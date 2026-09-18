@@ -42,16 +42,21 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const nextProject = await getNextProject(slug);
 
   return (
-    <PageShell innerPage>
+    <PageShell key={project._id} innerPage>
       <section
         className="pt-7 pb-10 sm:pt-10 sm:pb-14 lg:pt-12 lg:pb-18"
         aria-labelledby="project-title"
       >
-        <Button href="/proiecte" variant="secondary" direction="back">
+        <Button
+          href="/proiecte"
+          variant="secondary"
+          direction="back"
+          className="animate-enter motion-reduce:animate-none"
+        >
           Toate proiectele
         </Button>
         <Reveal className="mt-10 lg:mt-14">
-          <p className="mb-6 text-kicker tracking-kicker text-muted">
+          <p className="mb-6 animate-enter text-kicker tracking-kicker text-muted motion-reduce:animate-none">
             {project.isConcept ? "CONCEPT DEMONSTRATIV" : "PROIECT / WEBUILDER"}
           </p>
           <h1
@@ -68,7 +73,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </TextEntrance>
             ))}
           </h1>
-          <div className="mt-8 grid gap-7 border-t border-border pt-6 lg:mt-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+          <div className="mt-8 grid animate-enter gap-7 border-t border-border pt-6 [animation-delay:450ms] motion-reduce:animate-none lg:mt-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
             <p className="max-w-[48ch] text-base leading-relaxed text-muted">
               {project.summary}
             </p>
@@ -100,7 +105,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </dl>
           </div>
           {project.liveUrl && /^https:\/\//.test(project.liveUrl) && (
-            <div className="mt-7">
+            <div className="mt-7 animate-enter [animation-delay:550ms] motion-reduce:animate-none">
               <Button
                 href={project.liveUrl}
                 target="_blank"
@@ -114,7 +119,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </Reveal>
       </section>
       <Reveal>
-        <figure className="overflow-hidden rounded-card border border-border">
+        <figure className="animate-enter overflow-hidden rounded-card border border-border [animation-delay:250ms] motion-reduce:animate-none">
           <ProjectCover project={project} wide />
           <figcaption className="border-t border-border px-5 py-4 text-xs leading-relaxed text-muted sm:px-7">
             {project.cover?.caption ||

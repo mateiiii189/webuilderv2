@@ -81,13 +81,11 @@ export default function ProjectGrid({ initial }: { initial: ProjectBatch }) {
                       className={
                         batchIndex > 0
                           ? "animate-project-enter motion-reduce:animate-none"
-                          : undefined
+                          : "animate-enter motion-reduce:animate-none"
                       }
-                      style={
-                        batchIndex > 0
-                          ? { animationDelay: `${index * 120}ms` }
-                          : undefined
-                      }
+                      style={{
+                        animationDelay: `${(batchIndex > 0 ? 0 : 250) + index * 120}ms`,
+                      }}
                     >
                       <ProjectCard project={project} />
                     </div>

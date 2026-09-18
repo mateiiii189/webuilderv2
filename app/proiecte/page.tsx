@@ -21,7 +21,7 @@ export default async function ProjectsPage() {
         aria-labelledby="portfolio-title"
       >
         <Reveal>
-          <p className="mb-7 flex items-center gap-3 text-kicker tracking-kicker text-muted">
+          <p className="mb-7 flex animate-enter items-center gap-3 text-kicker tracking-kicker text-muted motion-reduce:animate-none">
             <span className="h-px w-6 bg-primary" aria-hidden="true" />
             PROIECTE / WEBUILDER
           </p>
@@ -35,7 +35,7 @@ export default async function ProjectsPage() {
                 <span className="text-primary">Detalii cu sens.</span>
               </TextEntrance>
             </h1>
-            <p className="max-w-[43ch] animate-enter text-[15px] leading-relaxed text-muted [animation-delay:350ms] motion-reduce:animate-none lg:pb-2">
+            <p className="max-w-[43ch] animate-enter text-[15px] leading-relaxed text-muted [animation-delay:450ms] motion-reduce:animate-none lg:pb-2">
               De la imaginea unui brand la felul în care lucrează o echipă.
               Explorăm experiențe digitale în care fiecare detaliu are un rost.
             </p>
@@ -44,7 +44,7 @@ export default async function ProjectsPage() {
       </section>
       <section className="pb-18 sm:pb-section" aria-labelledby="concepts-title">
         <Reveal>
-          <div className="mb-8 flex flex-col gap-3 border-t border-border pt-5 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
+          <div className="mb-8 flex animate-enter flex-col gap-3 border-t border-border pt-5 [animation-delay:550ms] motion-reduce:animate-none sm:flex-row sm:items-baseline sm:justify-between sm:gap-8">
             <h2
               id="concepts-title"
               className="text-kicker tracking-kicker text-soft"
