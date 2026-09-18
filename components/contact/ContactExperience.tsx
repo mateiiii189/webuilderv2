@@ -36,19 +36,19 @@ export default function ContactExperience({
       <div className="grid items-start gap-x-[clamp(40px,7vw,120px)] gap-y-9 pt-9 pb-16 min-[440px]:max-lg:gap-y-7 min-[440px]:max-lg:pt-7 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:grid-rows-[max-content_1fr] lg:gap-y-12 lg:pt-18 lg:pb-24">
         <Reveal>
           <p
-            className={`${kicker} mb-6 flex animate-enter items-center gap-3 motion-reduce:animate-none min-[440px]:max-lg:mb-5`}
+            className={`${kicker} mb-6 flex animate-enter items-center gap-3 motion-reduce:animate-none min-[440px]:max-lg:mb-5 min-[440px]:max-lg:justify-center`}
           >
             <span className="h-px w-6 bg-primary" aria-hidden="true" />
             CONTACT / WEBUILDER
           </p>
-          <h1 className="text-hero-mobile leading-[1.065] font-medium tracking-hero lg:text-hero lg:leading-[1.07] lg:[@media(max-height:820px)]:text-[clamp(60px,6.3vw,102.4px)]">
+          <h1 className="text-hero-mobile leading-[1.065] font-medium tracking-hero min-[440px]:max-lg:text-center lg:text-hero lg:leading-[1.07] lg:[@media(max-height:820px)]:text-[clamp(60px,6.3vw,102.4px)]">
             <TextEntrance delay={120}>Ai o idee?</TextEntrance>
             <TextEntrance delay={250}>Hai s-o</TextEntrance>
             <TextEntrance delay={380}>
               <span className="text-primary">construim.</span>
             </TextEntrance>
           </h1>
-          <p className="mt-6 max-w-[36ch] animate-enter text-[15px] leading-relaxed text-muted [animation-delay:450ms] motion-reduce:animate-none min-[440px]:max-lg:mt-5 min-[440px]:max-lg:max-w-[58ch] sm:text-base lg:mt-8">
+          <p className="mt-6 max-w-[36ch] animate-enter text-[15px] leading-relaxed text-muted [animation-delay:450ms] motion-reduce:animate-none min-[440px]:max-lg:mx-auto min-[440px]:max-lg:mt-5 min-[440px]:max-lg:max-w-[44ch] min-[440px]:max-lg:text-center sm:text-base lg:mt-8">
             Un website, o aplicație sau un mod mai simplu de a lucra. Începem cu
             ce contează pentru afacerea ta.
           </p>
@@ -56,16 +56,16 @@ export default function ContactExperience({
             <div
               role="group"
               aria-label="Contact direct"
-              className="mt-8 flex max-w-md animate-enter flex-col gap-7 [animation-delay:550ms] motion-reduce:animate-none min-[440px]:max-lg:mt-6 min-[440px]:max-lg:gap-5 sm:max-lg:grid sm:max-lg:max-w-none sm:max-lg:grid-cols-2 sm:max-lg:items-start sm:max-lg:gap-x-6 lg:mt-10"
+              className="mt-8 flex max-w-md animate-enter flex-col gap-7 [animation-delay:550ms] motion-reduce:animate-none min-[440px]:max-lg:mx-auto min-[440px]:max-lg:mt-7 min-[440px]:max-lg:gap-5 min-[440px]:max-lg:border-t min-[440px]:max-lg:border-border min-[440px]:max-lg:pt-6 min-[440px]:max-sm:text-center sm:max-lg:grid sm:max-lg:max-w-[640px] sm:max-lg:grid-cols-2 sm:max-lg:items-start sm:max-lg:gap-x-6 lg:mt-10"
             >
               {email && (
                 <div>
-                  <p className="mb-2 text-kicker tracking-kicker text-muted">
+                  <p className="mb-3 text-kicker tracking-kicker text-muted">
                     E-MAIL DIRECT
                   </p>
                   <a
                     href={`mailto:${email}`}
-                    className="inline-block max-w-full py-1 text-xl font-medium tracking-tight [overflow-wrap:anywhere] text-foreground decoration-primary/50 underline-offset-8 transition-colors duration-500 hover:text-primary hover:underline focus-visible:outline-offset-4 motion-reduce:transition-none sm:text-2xl"
+                    className="inline-flex min-h-control max-w-full items-center py-1 text-xl font-medium tracking-tight [overflow-wrap:anywhere] text-foreground decoration-primary/50 underline-offset-8 transition-colors duration-500 hover:text-primary hover:underline focus-visible:outline-offset-4 motion-reduce:transition-none sm:text-2xl"
                   >
                     {email}
                   </a>
@@ -73,9 +73,8 @@ export default function ContactExperience({
               )}
               {whatsappUrl && (
                 <div>
-                  <p className="mb-4 max-w-[34ch] text-sm leading-relaxed text-muted">
-                    Preferi să vorbim pe WhatsApp? Scrie-ne câteva cuvinte
-                    despre ideea ta.
+                  <p className="mb-3 text-kicker tracking-kicker text-muted">
+                    PREFERI WHATSAPP?
                   </p>
                   <Button
                     href={whatsappUrl}
@@ -85,6 +84,9 @@ export default function ContactExperience({
                   >
                     Scrie-ne pe WhatsApp
                   </Button>
+                  <p className="mt-3 max-w-[30ch] text-xs leading-relaxed text-muted min-[440px]:max-sm:mx-auto">
+                    Povestește-ne despre proiect.
+                  </p>
                 </div>
               )}
             </div>
