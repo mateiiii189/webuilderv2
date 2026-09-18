@@ -27,7 +27,7 @@ const questions = [
 export default function ContactExperience({ email }: { email: string }) {
   return (
     <>
-      <div className="grid items-start gap-x-[clamp(40px,7vw,120px)] gap-y-9 pt-9 pb-16 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-y-12 lg:pt-18 lg:pb-24">
+      <div className="grid items-start gap-x-[clamp(40px,7vw,120px)] gap-y-9 pt-9 pb-16 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:grid-rows-[max-content_1fr] lg:gap-y-12 lg:pt-18 lg:pb-24">
         <Reveal>
           <p
             className={`${kicker} mb-6 flex animate-enter items-center gap-3 motion-reduce:animate-none`}
