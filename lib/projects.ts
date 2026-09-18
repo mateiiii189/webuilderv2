@@ -2,9 +2,9 @@ import "server-only";
 import { cache } from "react";
 import { projects as concepts } from "./home-content";
 import { sanityClient, sanityFetch } from "@/sanity/lib/client";
-import type { Project, ProjectSummary } from "./project-types";
+import type { Project, ProjectBatch, ProjectSummary } from "./project-types";
 
-export const PROJECTS_PER_PAGE = 6;
+export const PROJECTS_PER_PAGE = 4;
 export const usingDemoProjects = !sanityClient;
 
 type Cursor = { date: string; id: string };
@@ -68,70 +68,45 @@ function toProject(raw: RawProject): Project {
   };
 }
 
-export async function getProjectPage(
-  category: string,
-  after?: string,
-  before?: string,
-) {
-  const afterCursor = decodeProjectCursor(after);
-  const beforeCursor = afterCursor ? null : decodeProjectCursor(before);
-  const cursor = afterCursor || beforeCursor;
-  const backwards = Boolean(beforeCursor);
+export async function getProjectBatch(after?: string): Promise<ProjectBatch> {
+  const cursor = decodeProjectCursor(after);
   let items: ProjectSummary[];
   let total: number;
 
   if (!sanityClient) {
-    let selected = demoProjects.filter(
-      (item) => !category || item.categoryId === category,
-    );
-    total = selected.length;
-    if (cursor)
-      selected = selected.filter((item) => {
-        const comparison =
-          item.publishedAt.localeCompare(cursor.date) ||
-          item._id.localeCompare(cursor.id);
-        return backwards ? comparison > 0 : comparison < 0;
-      });
-    items = (backwards ? selected.toReversed() : selected).slice(
-      0,
-      PROJECTS_PER_PAGE + 1,
-    );
+    total = demoProjects.length;
+    items = demoProjects
+      .filter(
+        (item) =>
+          !cursor ||
+          item.publishedAt < cursor.date ||
+          (item.publishedAt === cursor.date && item._id < cursor.id),
+      )
+      .slice(0, PROJECTS_PER_PAGE + 1);
   } else {
-    const cursorFilter = !cursor
-      ? ""
-      : backwards
-        ? " && (publishedAt > $date || (publishedAt == $date && _id > $id))"
-        : " && (publishedAt < $date || (publishedAt == $date && _id < $id))";
-    const sort = backwards ? "asc" : "desc";
-    // A bounded slice after cursor filtering keeps deep pages from scanning offsets.
+    const cursorFilter = cursor
+      ? " && (publishedAt < $date || (publishedAt == $date && _id < $id))"
+      : "";
     const result = await sanityFetch<{
       total: number;
       items: ProjectSummary[];
     }>(
       `{
-      "total": count(*[${published} && ($category == "" || categoryId == $category)]),
-      "items": *[${published} && ($category == "" || categoryId == $category)${cursorFilter}]
-        | order(publishedAt ${sort}, _id ${sort})[0...${PROJECTS_PER_PAGE + 1}]{${summaryFields}}
-    }`,
-      { category, date: cursor?.date ?? "", id: cursor?.id ?? "" },
+        "total": count(*[${published}]),
+        "items": *[${published}${cursorFilter}]
+          | order(publishedAt desc, _id desc)[0...${PROJECTS_PER_PAGE + 1}]{${summaryFields}}
+      }`,
+      { date: cursor?.date ?? "", id: cursor?.id ?? "" },
     );
     items = result.items;
     total = result.total;
   }
   const more = items.length > PROJECTS_PER_PAGE;
   items = items.slice(0, PROJECTS_PER_PAGE);
-  if (backwards) items.reverse();
   return {
     items,
     total,
-    previous:
-      items.length && (backwards ? more : Boolean(afterCursor))
-        ? encodeCursor(items[0])
-        : null,
-    next:
-      items.length && (backwards || more)
-        ? encodeCursor(items[items.length - 1])
-        : null,
+    next: more ? encodeCursor(items[items.length - 1]) : null,
   };
 }
 

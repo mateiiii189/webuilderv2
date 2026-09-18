@@ -4,65 +4,101 @@ test.skip(
   !process.env.SANITY_INTEGRATION_TEST,
   "Uses a local Content Lake fixture, never live credentials.",
 );
-async function followPage(page: import("@playwright/test").Page, name: string) {
-  const link = page.getByRole("link", { name, exact: true });
-  const destination = new URL((await link.getAttribute("href"))!, page.url())
-    .href;
-  await link.click();
-  await expect(page).toHaveURL(destination);
-}
-
 const cards = (page: import("@playwright/test").Page) =>
   page.locator('main a[href^="/proiecte/proiect-test-"]');
 
-test("bounded cursor pages have no duplicates and navigate backwards", async ({
+test("load more appends four at a time without replacing cards or changing the URL", async ({
   page,
 }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/proiecte");
-  await expect(cards(page)).toHaveCount(6);
+  await expect(cards(page)).toHaveCount(4);
+  await expect(
+    page.getByRole("navigation", { name: "Categorii proiecte" }),
+  ).toHaveCount(0);
   const first = await cards(page).evaluateAll((links) =>
     links.map((link) => link.getAttribute("href")),
   );
-  await followPage(page, "Următoarele");
-  await expect(cards(page)).toHaveCount(6);
-  const second = await cards(page).evaluateAll((links) =>
-    links.map((link) => link.getAttribute("href")),
-  );
-  expect(second.some((href) => first.includes(href))).toBe(false);
-  await followPage(page, "Următoarele");
-  await expect(cards(page)).toHaveCount(3);
-  await expect(
-    page.getByRole("link", { name: "Următoarele", exact: true }),
-  ).toHaveCount(0);
-  await followPage(page, "Anterioarele");
-  await expect(cards(page)).toHaveCount(6);
-  expect(
-    await cards(page).evaluateAll((links) =>
+  const button = page.getByRole("button", {
+    name: "Arată mai multe",
+    exact: true,
+  });
+  for (const count of [8, 12, 15]) {
+    await button.click();
+    await expect(cards(page)).toHaveCount(count);
+    await expect(page).toHaveURL(/\/proiecte$/);
+    const links = await cards(page).evaluateAll((links) =>
       links.map((link) => link.getAttribute("href")),
-    ),
-  ).toEqual(second);
+    );
+    expect(links.slice(0, 4)).toEqual(first);
+    expect(new Set(links).size).toBe(count);
+  }
+  await expect(button).toHaveCount(0);
+  await expect(page.getByRole("status")).toHaveText(
+    "Ai văzut toate proiectele.",
+  );
 });
 
-test("category changes reset pagination, empty filters and bad cursors are usable", async ({
+test("failed loads keep existing projects and retry without duplicate requests", async ({
   page,
 }) => {
   await page.goto("/proiecte");
-  await followPage(page, "Următoarele");
-  await page
-    .getByRole("navigation", { name: "Categorii proiecte" })
-    .getByRole("link", { name: "Aplicații web" })
-    .click();
-  await expect(page).toHaveURL(/\/proiecte\?category=web-app$/);
-  await expect(cards(page)).toHaveCount(5);
-  await page
-    .getByRole("navigation", { name: "Categorii proiecte" })
-    .getByRole("link", { name: "Automatizări" })
-    .click();
-  await expect(
-    page.getByRole("heading", { name: "Momentan, niciun proiect aici." }),
-  ).toBeVisible();
-  await page.goto("/proiecte?after=invalid&category=unknown");
-  await expect(cards(page)).toHaveCount(6);
+  const button = page.getByRole("button", {
+    name: "Arată mai multe",
+    exact: true,
+  });
+  await page.route(
+    "**/api/projects?*",
+    (route) => route.fulfill({ status: 503, body: "{}" }),
+    { times: 1 },
+  );
+  await button.click();
+  await expect(page.locator("main").getByRole("alert")).toContainText(
+    "Încearcă din nou",
+  );
+  await expect(cards(page)).toHaveCount(4);
+  let release = () => {};
+  const gate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  let requests = 0;
+  await page.route("**/api/projects?*", async (route) => {
+    requests++;
+    await gate;
+    await route.continue();
+  });
+  await button.evaluate((element) => {
+    (element as HTMLButtonElement).click();
+    (element as HTMLButtonElement).click();
+  });
+  const loading = page.getByRole("button", { name: "Se încarcă…" });
+  await expect(loading).toBeDisabled();
+  await expect.poll(() => requests).toBe(1);
+  release();
+  await expect(cards(page)).toHaveCount(8);
+  await expect(page.locator("main").getByRole("alert")).toHaveCount(0);
+  expect(requests).toBe(1);
+});
+
+test("batch API is bounded and rejects malformed cursors", async ({
+  request,
+}) => {
+  const response = await request.get("/api/projects");
+  expect(response.status()).toBe(200);
+  const first = await response.json();
+  expect(first.items).toHaveLength(4);
+  expect(first.total).toBe(15);
+  expect(first.next).toBeTruthy();
+  const invalid = await request.get("/api/projects?after=invalid");
+  expect(invalid.status()).toBe(400);
+  const end = Buffer.from(
+    JSON.stringify({ date: "2000-01-01T00:00:00.000Z", id: "last" }),
+  ).toString("base64url");
+  const exhausted = await (
+    await request.get(`/api/projects?after=${end}`)
+  ).json();
+  expect(exhausted.items).toEqual([]);
+  expect(exhausted.next).toBeNull();
 });
 
 test("featured selection, CMS case studies, images, and unpublished pages", async ({
@@ -99,6 +135,10 @@ test("populated portfolio and controls fit mobile and tablet widths", async ({
     for (const route of ["/proiecte", "/proiecte/proiect-test-8"]) {
       await page.goto(route);
       await expect(page.locator("h1")).toBeVisible();
+      if (route === "/proiecte") {
+        await page.getByRole("button", { name: "Arată mai multe" }).click();
+        await expect(cards(page)).toHaveCount(8);
+      }
       expect(
         await page.evaluate(
           () => document.documentElement.scrollWidth <= innerWidth,

@@ -104,8 +104,8 @@ The Contact page displays the email address and a “Telefon” number as select
 
 ### Portfolio
 
-`/proiecte` reads published Sanity projects, with category filters and six items per page. Cursor pagination uses publication date and document ID, so deep pages do not require large offsets. The homepage fetches at most two featured projects. Detail pages include uploaded images, galleries, optional live links, and the existing contact CTA.
+`/proiecte` starts with four published Sanity projects. An **Arată mai multe** button appends four more per click without replacing existing cards or changing the URL. It disappears after the final batch and supports retry after a failed request. Categories remain in Studio; there are no public filters. Bounded server queries use publication date and document ID, so later batches do not require large offsets. The homepage fetches at most two featured projects. Detail pages include uploaded images, galleries, optional live links, and the existing contact CTA.
 
 Before configuring Sanity, the two local demonstration concepts remain available. Once configured, Sanity is the only content source; an empty dataset shows an empty portfolio. Failures display a retry state rather than substituting demonstration content. Routine content reads revalidate after 60 seconds on subsequent requests; no rebuild is required for new project pages.
 
-Run `npx playwright test tests/projects.spec.ts` for the unconfigured demonstration flow, and `npm run test:sanity` for mocked published-content, filtering, pagination, images, and featured-project checks. Both test runs replace inherited CMS credentials and never write to Sanity.
+Run `npx playwright test tests/projects.spec.ts` for the unconfigured demonstration flow, and `npm run test:sanity` for mocked published-content, incremental loading, retries, images, and featured-project checks. Both test runs replace inherited CMS credentials and never write to Sanity.

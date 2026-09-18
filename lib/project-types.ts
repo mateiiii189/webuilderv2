@@ -38,13 +38,8 @@ export type Project = ProjectSummary & {
   gallery: ProjectImage[];
 };
 
-export function portfolioHref(
-  category = "",
-  cursor?: { direction: "after" | "before"; value: string },
-) {
-  const params = new URLSearchParams();
-  if (category) params.set("category", category);
-  if (cursor) params.set(cursor.direction, cursor.value);
-  const query = params.toString();
-  return `/proiecte${query ? `?${query}` : ""}`;
-}
+export type ProjectBatch = {
+  items: ProjectSummary[];
+  total: number;
+  next: string | null;
+};

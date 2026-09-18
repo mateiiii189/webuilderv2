@@ -37,8 +37,8 @@ The portfolio sorts by date, newest first, with document ID as a stable tiebreak
 
 ## Lots of projects
 
-- Six cards per page, fetched on the server. Next/Previous links use date-and-ID cursors, not large query offsets. Filters reset the cursor.
-- Categories: Website-uri, Aplicații web, Automatizări. Their shared definitions live in `lib/project-types.ts`.
+- Four cards on the initial page, then **Arată mai multe** appends four more per click. Existing cards stay visible and the URL does not change. The button disappears after the last batch; failed requests can be retried. Server queries use date-and-ID cursors, not large query offsets.
+- Categories stay in Studio for organization, with no category filters on the public portfolio. Current choices live in `lib/project-types.ts` and can be expanded later without changing this layout.
 - Only the two highest-priority **Afișează pe homepage** projects appear on the homepage. Lower `Ordine pe homepage` numbers come first; nothing is automatically featured.
 - Listing queries fetch card fields only. Full stories and galleries are fetched on their detail page.
 - Images use Sanity transformations and Next image optimization, responsive sizes, and lazy loading.
@@ -55,4 +55,4 @@ npx playwright test tests/projects.spec.ts
 npm run test:sanity
 ```
 
-The first command checks the local demonstration flow. The second evaluates the actual GROQ queries against a local 15-project fixture, including equal timestamps, category filtering, previous/next navigation, featured limits, galleries, and draft exclusion. Test builds override CMS credentials and never write to Sanity. These checks do not verify your actual account, CORS settings, or dataset; perform a publish-and-view check after connecting them.
+The first command checks the local demonstration flow. The second evaluates the actual GROQ queries against a local 15-project fixture, including equal timestamps, four-at-a-time loading, retries, duplicate-click protection, featured limits, galleries, and draft exclusion. Test builds override CMS credentials and never write to Sanity. These checks do not verify your actual account, CORS settings, or dataset; perform a publish-and-view check after connecting them.
