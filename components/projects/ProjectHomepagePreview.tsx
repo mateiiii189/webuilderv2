@@ -31,8 +31,8 @@ export default function ProjectHomepagePreview({
 
   return (
     <figure className="mx-auto max-w-[1200px] animate-enter overflow-hidden rounded-card border border-border bg-surface [animation-delay:250ms] motion-reduce:animate-none">
-      <div className="flex flex-col items-start justify-between gap-3 border-b border-border p-3 sm:flex-row sm:items-center sm:px-5 sm:py-4">
-        <div className="flex max-w-full min-w-0 flex-1 items-center gap-4">
+      <div className="flex flex-col items-start justify-between gap-3 border-b border-border p-3 sm:flex-row sm:flex-wrap sm:items-center sm:px-5 sm:py-4">
+        <div className="flex max-w-full min-w-[min(100%,180px)] flex-1 items-center gap-4">
           <span
             aria-hidden="true"
             className="flex shrink-0 gap-1.5 [&>i]:size-2 [&>i]:rounded-full"

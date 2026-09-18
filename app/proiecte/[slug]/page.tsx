@@ -56,8 +56,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         >
           Toate proiectele
         </Button>
-        <div className="mt-8 grid gap-7 sm:mt-10 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] xl:grid-rows-[min-content_1fr] xl:items-start xl:gap-x-[clamp(32px,4vw,72px)] xl:gap-y-6">
-          <Reveal className="xl:col-start-2 xl:row-start-1">
+        <div className="mt-8 grid gap-7 sm:mt-10 min-[768px]:grid-cols-2 min-[768px]:grid-rows-[min-content_1fr] min-[768px]:items-start min-[768px]:gap-x-[clamp(24px,4vw,72px)] min-[768px]:gap-y-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]">
+          <Reveal className="[container-type:inline-size] min-[768px]:col-start-2 min-[768px]:row-start-1">
             <p className="mb-4 animate-enter text-kicker tracking-kicker text-muted motion-reduce:animate-none">
               {project.isConcept
                 ? "CONCEPT DEMONSTRATIV"
@@ -65,7 +65,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             </p>
             <h1
               id="project-title"
-              className="text-[clamp(36px,10vw,44px)] leading-[1.08] font-medium tracking-hero sm:text-[52px] xl:text-[clamp(40px,3.8vw,64px)]"
+              className="text-[clamp(36px,10vw,44px)] leading-[1.08] font-medium tracking-hero min-[768px]:text-[clamp(28px,9cqw,64px)]"
             >
               {project.headline.map((line, index) => (
                 <TextEntrance key={index} delay={120 + index * 130}>
@@ -78,7 +78,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               ))}
             </h1>
           </Reveal>
-          <Reveal className="xl:col-start-1 xl:row-span-2 xl:row-start-1">
+          <Reveal className="min-[768px]:col-start-1 min-[768px]:row-span-2 min-[768px]:row-start-1">
             {project.homepagePreview?.asset?._ref ? (
               <ProjectHomepagePreview
                 image={project.homepagePreview}
@@ -86,7 +86,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 liveUrl={project.liveUrl}
               />
             ) : (
-              <figure className="mx-auto max-w-[1000px] animate-enter [animation-delay:250ms] motion-reduce:animate-none max-xl:[&>a]:w-full max-xl:[&>a>img]:max-h-none max-xl:[&>a>img]:w-full">
+              <figure className="mx-auto max-w-[1000px] animate-enter [animation-delay:250ms] motion-reduce:animate-none max-[768px]:[&>a]:w-full max-[768px]:[&>a>img]:max-h-none max-[768px]:[&>a>img]:w-full">
                 <ProjectCover project={project} presentation="detail" />
                 <figcaption className="mt-5 border-t border-border pt-4 text-xs leading-relaxed text-muted">
                   {project.cover?.caption ||
@@ -97,7 +97,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
               </figure>
             )}
           </Reveal>
-          <Reveal className="xl:col-start-2 xl:row-start-2">
+          <Reveal className="min-[768px]:col-start-2 min-[768px]:row-start-2">
             <div className="grid animate-enter gap-6 [animation-delay:450ms] motion-reduce:animate-none">
               <p className="max-w-[48ch] text-base leading-relaxed text-muted">
                 {project.summary}
