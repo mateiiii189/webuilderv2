@@ -1,11 +1,13 @@
 export default function ProjectPreview({
   kind,
+  wide = false,
 }: {
   kind: "architecture" | "platform";
+  wide?: boolean;
 }) {
   return (
     <div
-      className={`[container-type:inline-size] relative grid aspect-[1.1] place-items-center overflow-hidden px-5 pt-[54px] pb-[30px] sm:aspect-[1.2] sm:px-7 sm:pt-[60px] sm:pb-9 ${kind === "architecture" ? "bg-[#282d27]" : "bg-[#151c21]"}`}
+      className={`[container-type:inline-size] relative grid place-items-center overflow-hidden px-5 pt-[54px] pb-[30px] sm:px-7 sm:pt-[60px] sm:pb-9 ${wide ? "aspect-[1.1] sm:aspect-[1.5] lg:aspect-[2.15] [&>div]:max-w-[840px]" : "aspect-[1.1] sm:aspect-[1.2]"} ${kind === "architecture" ? "bg-[#282d27]" : "bg-[#151c21]"}`}
       aria-hidden="true"
     >
       <span className="absolute top-[21px] left-5 text-[9px] tracking-[0.1em] text-[#eeeee6] sm:left-6 sm:text-[10px]">

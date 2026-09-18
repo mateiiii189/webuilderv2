@@ -56,6 +56,12 @@ export default function HomeSections() {
                 </summary>
                 <div className="px-[21px] pb-6 text-sm leading-[1.8] text-muted sm:px-[25px]">
                   <p className="mb-2">{project.text}</p>
+                  <a
+                    className={`${textLink} mr-5 inline-block`}
+                    href={`/proiecte/${project.slug}`}
+                  >
+                    Explorează conceptul →
+                  </a>
                   <a className={textLink} href="/contact">
                     Discută un proiect similar →
                   </a>
@@ -63,6 +69,11 @@ export default function HomeSections() {
               </details>
             </Reveal>
           ))}
+        </div>
+        <div className="mt-8 sm:mt-10">
+          <Button href="/proiecte" variant="secondary">
+            Toate proiectele
+          </Button>
         </div>
       </section>
       <section

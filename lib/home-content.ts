@@ -51,7 +51,28 @@ export const processSteps = [
 export const projects = [
   {
     kind: "architecture",
+    slug: "website-arhitectura",
     title: "Website de arhitectură",
+    headline: ["Spațiu pentru", "perspectivă."],
+    summary:
+      "O direcție editorială pentru un studio de arhitectură. Proiectele în prim-plan, o identitate calmă și loc pentru fiecare poveste.",
+    direction: "Arhitectura are nevoie de spațiu. Și online.",
+    brief:
+      "Am imaginat un website pentru un studio care vrea să își prezinte modul de a gândi, nu doar o galerie de lucrări. Conceptul explorează o structură simplă, în care compoziția și materialele proiectelor definesc ritmul paginii.",
+    decisions: [
+      [
+        "Proiectul conduce povestea.",
+        "O zonă vizuală generoasă, însoțită de context scurt. Vizitatorul poate înțelege direcția studioului fără să parcurgă blocuri lungi de text.",
+      ],
+      [
+        "O paletă inspirată de materiale.",
+        "Nuanțe de piatră și verde stins, cu o tipografie editorială. Interfața completează lucrările și le lasă spațiu să se exprime.",
+      ],
+      [
+        "Aceeași idee, pe orice ecran.",
+        "Pe mobil, ordinea conținutului rămâne clară: introducere, proiecte, contact. Compoziția se simplifică în jurul acestor pași.",
+      ],
+    ],
     category: "Web design / Development",
     text:
       "Concept vizual pentru un studio de arhitectură: " +
@@ -60,7 +81,28 @@ export const projects = [
   },
   {
     kind: "platform",
+    slug: "platforma-management",
     title: "Platformă de management",
+    headline: ["Mai multă ordine.", "Mai puțin zgomot."],
+    summary:
+      "Un concept de interfață pentru echipe: proiecte, activitate și priorități, adunate într-un spațiu de lucru ușor de urmărit.",
+    direction: "O imagine clară a lucrurilor în mișcare.",
+    brief:
+      "Punctul de plecare este o echipă care își împarte atenția între mai multe proiecte. Conceptul propune un tablou de bord în care informațiile esențiale se văd dintr-o privire, iar detaliile au un loc bine definit.",
+    decisions: [
+      [
+        "Priorități vizibile.",
+        "Rezumatul activității și lucrurile în curs sunt grupate în zone distincte. Datele demonstrative ilustrează ierarhia propusă, fără a sugera rezultate reale.",
+      ],
+      [
+        "Un limbaj vizual consecvent.",
+        "Aceleași forme, culori și spațieri se repetă în panouri. Accentul albastru stins diferențiază informația activă de elementele de fundal.",
+      ],
+      [
+        "Loc pentru următorul pas.",
+        "Navigația laterală și gruparea informației definesc baza unei aplicații. Funcționalitățile și integrările ar fi stabilite în funcție de fluxul real al echipei.",
+      ],
+    ],
     category: "UI / UX / Aplicație web",
     text:
       "Concept de interfață pentru organizarea activității: " +

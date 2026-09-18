@@ -5,9 +5,7 @@ const whatsappNumber = (process.env.CONTACT_WHATSAPP ?? "")
 export const site = {
   // Public contact address, read on the server and passed to the form.
   email: process.env.CONTACT_EMAIL ?? "",
-  phone: /^[1-9]\d{7,14}$/.test(whatsappNumber)
-    ? `+${whatsappNumber}`
-    : "",
+  phone: /^[1-9]\d{7,14}$/.test(whatsappNumber) ? `+${whatsappNumber}` : "",
 };
 
 export const navigation = [
@@ -19,6 +17,11 @@ export const navigation = [
 export function navigationFor(innerPage: boolean) {
   return navigation.map(({ label, id }) => ({
     label,
-    href: innerPage ? `/?section=${id}` : `#${id}`,
+    href:
+      id === "proiecte"
+        ? "/proiecte"
+        : innerPage
+          ? `/?section=${id}`
+          : `#${id}`,
   }));
 }

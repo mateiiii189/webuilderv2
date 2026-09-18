@@ -101,3 +101,11 @@ Deploy as a Next.js project on Vercel. Set `CONTACT_EMAIL` before the production
 Set `CONTACT_WHATSAPP` in `.env.local` to your WhatsApp business number in international format (country code, without the local leading zero). Spaces and a leading `+` are accepted. Restart development, or rebuild production after setting the deployment variable.
 
 The Contact page displays the email address and a “Telefon” number as selectable text, with matching gold hover transitions and no borders, arrows, or click actions. The phone number uses the existing `CONTACT_WHATSAPP` setting; an empty or malformed number hides the phone entry.
+
+### Portfolio
+
+`/proiecte` lists the two existing demonstration concepts. Each card leads to a statically generated detail page at `/proiecte/[slug]`, with its design direction, preview, next-concept link, and Contact CTA. The navigation and homepage link to the portfolio.
+
+Edit `projects` in `lib/home-content.ts` to update the copy, slugs, and design decisions. `ProjectPreview` renders the existing illustrative previews. The current entries are explicitly labelled concepts, with no associated client or claimed business results. Replace those entries and previews with approved real work when available; no CMS or new dependency is required for this version.
+
+Run `npx playwright test tests/projects.spec.ts` to check responsive headings, navigation, and missing-project handling.

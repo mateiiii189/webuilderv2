@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import Brand from "@/components/ui/Brand";
 import Button from "@/components/ui/Button";
 import { navigationFor } from "@/lib/site";
@@ -13,7 +14,8 @@ export default function Header({ innerPage = false }: { innerPage?: boolean }) {
   const [open, setOpen] = useState(false);
   const dialog = useRef<HTMLDialogElement>(null);
   const navigation = navigationFor(innerPage);
-  const contactHref = innerPage ? "#contact-form" : "/contact";
+  const pathname = usePathname();
+  const contactHref = pathname === "/contact" ? "#contact-form" : "/contact";
 
   useEffect(() => {
     if (!open || !dialog.current) return;
