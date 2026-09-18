@@ -33,22 +33,29 @@ export default function ContactExperience({
 }) {
   return (
     <>
-      <div className="grid items-start gap-x-[clamp(40px,7vw,120px)] gap-y-9 pt-9 pb-16 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:grid-rows-[max-content_1fr] lg:gap-y-12 lg:pt-18 lg:pb-24">
+      <div className="grid items-start gap-x-[clamp(40px,7vw,120px)] gap-y-9 pt-9 pb-16 min-[440px]:max-lg:gap-y-7 min-[440px]:max-lg:pt-7 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:grid-rows-[max-content_1fr] lg:gap-y-12 lg:pt-18 lg:pb-24">
         <Reveal>
           <p
-            className={`${kicker} mb-6 flex animate-enter items-center gap-3 motion-reduce:animate-none`}
+            className={`${kicker} mb-6 flex animate-enter items-center gap-3 motion-reduce:animate-none min-[440px]:max-lg:mb-5`}
           >
             <span className="h-px w-6 bg-primary" aria-hidden="true" />
             CONTACT / WEBUILDER
           </p>
-          <h1 className="text-[clamp(46px,11vw,76px)] leading-[1.06] font-medium tracking-hero lg:text-[clamp(58px,5.9vw,96px)]">
+          <h1 className="text-[clamp(46px,11vw,76px)] leading-[1.06] font-medium tracking-hero min-[440px]:max-lg:text-[clamp(38px,7.4vw,64px)] lg:text-[clamp(58px,5.9vw,96px)]">
             <TextEntrance delay={120}>Ai o idee?</TextEntrance>
-            <TextEntrance delay={250}>Hai s-o</TextEntrance>
-            <TextEntrance delay={380}>
-              <span className="text-primary">construim.</span>
-            </TextEntrance>
+            <span className="hidden min-[440px]:max-lg:block">
+              <TextEntrance delay={250}>
+                Hai s-o <span className="text-primary">construim.</span>
+              </TextEntrance>
+            </span>
+            <span className="min-[440px]:max-lg:hidden">
+              <TextEntrance delay={250}>Hai s-o</TextEntrance>
+              <TextEntrance delay={380}>
+                <span className="text-primary">construim.</span>
+              </TextEntrance>
+            </span>
           </h1>
-          <p className="mt-6 max-w-[36ch] animate-enter text-[15px] leading-relaxed text-muted [animation-delay:450ms] motion-reduce:animate-none sm:text-base lg:mt-8">
+          <p className="mt-6 max-w-[36ch] animate-enter text-[15px] leading-relaxed text-muted [animation-delay:450ms] motion-reduce:animate-none min-[440px]:max-lg:mt-5 min-[440px]:max-lg:max-w-[58ch] sm:text-base lg:mt-8">
             Un website, o aplicație sau un mod mai simplu de a lucra. Începem cu
             ce contează pentru afacerea ta.
           </p>
@@ -56,7 +63,7 @@ export default function ContactExperience({
             <div
               role="group"
               aria-label="Contact direct"
-              className="mt-8 max-w-md animate-enter space-y-7 [animation-delay:550ms] motion-reduce:animate-none lg:mt-10"
+              className="mt-8 max-w-md animate-enter space-y-7 [animation-delay:550ms] motion-reduce:animate-none min-[440px]:max-lg:mt-6 min-[440px]:max-lg:space-y-5 lg:mt-10"
             >
               {email && (
                 <div>
