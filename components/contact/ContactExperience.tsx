@@ -63,7 +63,7 @@ export default function ContactExperience({
                   <p className="mb-2 text-kicker tracking-kicker text-muted">
                     E-MAIL DIRECT
                   </p>
-                  <p className="inline-flex min-h-control w-fit max-w-full items-center rounded-control border border-field-border bg-transparent px-[22px] py-[13px] text-sm leading-normal font-medium [overflow-wrap:anywhere] text-foreground select-text">
+                  <p className="inline-flex min-h-control w-fit max-w-full items-center rounded-control bg-transparent px-[22px] py-[13px] text-sm leading-normal font-medium [overflow-wrap:anywhere] text-foreground select-text">
                     {email}
                   </p>
                 </div>
