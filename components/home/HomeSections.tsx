@@ -2,12 +2,14 @@ import Button from "@/components/ui/Button";
 import Reveal from "@/components/ui/Reveal";
 import SectionHeading, { Kicker } from "@/components/ui/SectionHeading";
 import AccordionItem from "@/components/ui/AccordionItem";
-import ProjectPreview from "./ProjectPreview";
-import { projects, services, processSteps } from "@/lib/home-content";
+import ProjectCard from "@/components/projects/ProjectCard";
+import { getFeaturedProjects } from "@/lib/projects";
+import { services, processSteps } from "@/lib/home-content";
 import { site } from "@/lib/site";
 import { sectionSpacing, sectionDescription, textLink } from "@/lib/ui";
 
-export default function HomeSections() {
+export default async function HomeSections() {
+  const projects = await getFeaturedProjects();
   return (
     <>
       <section
@@ -29,44 +31,8 @@ export default function HomeSections() {
         </Reveal>
         <div className="grid items-start gap-7 sm:grid-cols-[1.1fr_0.9fr] sm:[&>div:nth-child(2)]:mt-18">
           {projects.map((project) => (
-            <Reveal key={project.kind}>
-              <details className="group/project overflow-hidden rounded-card border border-border bg-surface transition-[transform,border-color] duration-200 ease-brand hover:border-primary motion-safe:hover:-translate-y-[3px] motion-reduce:transition-none">
-                <summary className="group/preview focus-visible:-outline-offset-3">
-                  <span className="sr-only">Concept demonstrativ. </span>
-                  <ProjectPreview kind={project.kind} />
-                  <div className="flex flex-col items-start gap-3.5 p-[21px] sm:gap-4 sm:p-[25px] xl:flex-row xl:items-end xl:justify-between">
-                    <div>
-                      <p className="mb-2 text-kicker text-muted">
-                        {project.category}
-                      </p>
-                      <h3 className="text-xl font-medium tracking-[-0.04em] sm:text-[clamp(18px,1.6vw,26px)]">
-                        {project.title}
-                      </h3>
-                    </div>
-                    <span className="flex items-center gap-3 text-kicker whitespace-nowrap text-muted">
-                      Despre concept
-                      <span
-                        className="inline-block text-[23px] text-primary transition-transform duration-200 group-open/project:rotate-45 motion-reduce:transition-none"
-                        aria-hidden="true"
-                      >
-                        +
-                      </span>
-                    </span>
-                  </div>
-                </summary>
-                <div className="px-[21px] pb-6 text-sm leading-[1.8] text-muted sm:px-[25px]">
-                  <p className="mb-2">{project.text}</p>
-                  <a
-                    className={`${textLink} mr-5 inline-block`}
-                    href={`/proiecte/${project.slug}`}
-                  >
-                    Explorează conceptul →
-                  </a>
-                  <a className={textLink} href="/contact">
-                    Discută un proiect similar →
-                  </a>
-                </div>
-              </details>
+            <Reveal key={project._id}>
+              <ProjectCard project={project} home />
             </Reveal>
           ))}
         </div>

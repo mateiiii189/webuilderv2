@@ -1,38 +1,45 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import PageShell from "@/components/layout/PageShell";
-import ProjectPreview from "@/components/home/ProjectPreview";
+import ProjectCover, {
+  ProjectGalleryImage,
+} from "@/components/projects/ProjectCover";
 import ProjectContact from "@/components/projects/ProjectContact";
 import Button from "@/components/ui/Button";
 import Reveal from "@/components/ui/Reveal";
 import TextEntrance from "@/components/ui/TextEntrance";
-import { projects } from "@/lib/home-content";
+import {
+  getProject,
+  getNextProject,
+  getInitialProjectSlugs,
+} from "@/lib/projects";
 import { sectionSpacing, sectionTitle } from "@/lib/ui";
+
+export const revalidate = 60;
 
 type ProjectPageProps = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
-  return projects.map(({ slug }) => ({ slug }));
+  return getInitialProjectSlugs();
 }
 
 export async function generateMetadata({
   params,
 }: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const project = projects.find((item) => item.slug === slug);
+  const project = await getProject(slug);
   if (!project) notFound();
   return {
-    title: `${project.title} — Concept Webuilder`,
+    title: `${project.title} — ${project.isConcept ? "Concept " : ""}Webuilder`,
     description: project.text,
   };
 }
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { slug } = await params;
-  const index = projects.findIndex((item) => item.slug === slug);
-  if (index < 0) notFound();
-  const project = projects[index];
-  const nextProject = projects[(index + 1) % projects.length];
+  const project = await getProject(slug);
+  if (!project) notFound();
+  const nextProject = await getNextProject(slug);
 
   return (
     <PageShell innerPage>
@@ -45,16 +52,21 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </Button>
         <Reveal className="mt-10 lg:mt-14">
           <p className="mb-6 text-kicker tracking-kicker text-muted">
-            CONCEPT DEMONSTRATIV / 0{index + 1}
+            {project.isConcept ? "CONCEPT DEMONSTRATIV" : "PROIECT / WEBUILDER"}
           </p>
           <h1
             id="project-title"
             className="text-[clamp(36px,10vw,40px)] leading-[1.08] font-medium tracking-hero sm:text-[clamp(44px,7.3vw,112px)]"
           >
-            <TextEntrance delay={120}>{project.headline[0]}</TextEntrance>
-            <TextEntrance delay={250}>
-              <span className="text-primary">{project.headline[1]}</span>
-            </TextEntrance>
+            {project.headline.map((line, index) => (
+              <TextEntrance key={index} delay={120 + index * 130}>
+                <span
+                  className={`block wrap-anywhere ${index ? "text-primary" : ""}`}
+                >
+                  {line}
+                </span>
+              </TextEntrance>
+            ))}
           </h1>
           <div className="mt-8 grid gap-7 border-t border-border pt-6 lg:mt-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
             <p className="max-w-[48ch] text-base leading-relaxed text-muted">
@@ -74,21 +86,41 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                   STATUT
                 </dt>
                 <dd className="leading-relaxed text-soft">
-                  Explorare de design
-                  <br />
-                  Fără client asociat
+                  {project.isConcept ? (
+                    <>
+                      Explorare de design
+                      <br />
+                      Fără client asociat
+                    </>
+                  ) : (
+                    project.clientName || "Proiect Webuilder"
+                  )}
                 </dd>
               </div>
             </dl>
           </div>
+          {project.liveUrl && /^https:\/\//.test(project.liveUrl) && (
+            <div className="mt-7">
+              <Button
+                href={project.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="secondary"
+              >
+                Vezi website-ul
+              </Button>
+            </div>
+          )}
         </Reveal>
       </section>
       <Reveal>
         <figure className="overflow-hidden rounded-card border border-border">
-          <ProjectPreview kind={project.kind} wide />
+          <ProjectCover project={project} wide />
           <figcaption className="border-t border-border px-5 py-4 text-xs leading-relaxed text-muted sm:px-7">
-            {project.title} — interfață demonstrativă. Datele și elementele
-            vizuale sunt ilustrative.
+            {project.cover?.caption ||
+              (project.isConcept
+                ? `${project.title} — interfață demonstrativă. Datele și elementele vizuale sunt ilustrative.`
+                : project.title)}
           </figcaption>
         </figure>
       </Reveal>
@@ -103,7 +135,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           <h2 id="direction-title" className={`${sectionTitle} max-w-[18ch]`}>
             {project.direction}
           </h2>
-          <p className="mt-6 max-w-[43ch] text-base leading-relaxed text-muted">
+          <p className="mt-6 max-w-[43ch] text-base leading-relaxed whitespace-pre-line text-muted">
             {project.brief}
           </p>
         </Reveal>
@@ -130,21 +162,46 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
           </ol>
         </Reveal>
       </section>
-      <Reveal>
-        <div className="flex flex-col items-start gap-6 border-t border-border py-8 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
-          <div>
-            <p className="mb-2 text-kicker tracking-kicker text-muted">
-              MAI DEPARTE
-            </p>
-            <p className="text-xl font-medium tracking-heading">
-              {nextProject.title}
-            </p>
+      {project.gallery.length > 0 && (
+        <section
+          className="grid gap-8 pb-16 sm:gap-12 sm:pb-section"
+          aria-label="Galerie proiect"
+        >
+          {project.gallery
+            .filter((image) => image.asset?._ref)
+            .map((image, index) => (
+              <Reveal key={index}>
+                <figure className="overflow-hidden rounded-card border border-border bg-surface">
+                  <ProjectGalleryImage image={image} />
+                  {image.caption && (
+                    <figcaption className="border-t border-border px-5 py-4 text-xs leading-relaxed text-muted">
+                      {image.caption}
+                    </figcaption>
+                  )}
+                </figure>
+              </Reveal>
+            ))}
+        </section>
+      )}
+      {nextProject && (
+        <Reveal>
+          <div className="flex flex-col items-start gap-6 border-t border-border py-8 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
+            <div>
+              <p className="mb-2 text-kicker tracking-kicker text-muted">
+                MAI DEPARTE
+              </p>
+              <p className="text-xl font-medium tracking-heading">
+                {nextProject.title}
+              </p>
+            </div>
+            <Button href={`/proiecte/${nextProject.slug}`} variant="secondary">
+              {nextProject.isConcept
+                ? "Următorul concept"
+                : "Următorul proiect"}
+            </Button>
           </div>
-          <Button href={`/proiecte/${nextProject.slug}`} variant="secondary">
-            Următorul concept
-          </Button>
-        </div>
-      </Reveal>
+        </Reveal>
+      )}
       <ProjectContact />
     </PageShell>
   );

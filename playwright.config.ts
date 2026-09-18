@@ -26,6 +26,14 @@ export default defineConfig({
     reuseExistingServer: false,
     env: {
       CONTACT_EMAIL: "studio@example.test",
+      NEXT_PUBLIC_SANITY_PROJECT_ID: process.env.SANITY_INTEGRATION_TEST
+        ? "webuildertest"
+        : "",
+      NEXT_PUBLIC_SANITY_DATASET: "production",
+      SANITY_API_READ_TOKEN: "",
+      NODE_OPTIONS: process.env.SANITY_INTEGRATION_TEST
+        ? "--require ./tests/fixtures/sanity.cjs"
+        : "",
       // Always overwrite inherited credentials so tests cannot reach the live automation.
       GOOGLE_APPS_SCRIPT_URL: process.env.BOOKING_INTEGRATION_TEST
         ? "https://script.google.com/macros/s/webuilder-test/exec"
