@@ -15,28 +15,33 @@ export function ProjectGalleryImage({
     .image(image)
     .auto("format")
     .quality(85);
-  const src = cover
-    ? builder.width(1600).height(1200).fit("crop").url()
-    : builder.width(1800).fit("max").url();
+  const src = builder.width(1600).fit("max").url();
   return (
-    <Image
-      src={src}
-      alt={image.alt || ""}
-      width={cover ? 1600 : image.width || 1600}
-      height={cover ? 1200 : image.height || 1200}
-      sizes={
-        cover
-          ? "(max-width: 600px) 90vw, (max-width: 1920px) 45vw, 840px"
-          : "(max-width: 1920px) 90vw, 1700px"
-      }
-      placeholder={image.lqip ? "blur" : "empty"}
-      blurDataURL={image.lqip}
+    <div
       className={
         cover
-          ? "aspect-[4/3] w-full object-cover transition-transform duration-500 ease-in-out motion-safe:group-hover/preview:scale-[1.025] motion-reduce:transition-none"
-          : "h-auto max-h-[1100px] w-full object-contain"
+          ? "relative aspect-video max-h-80 w-full"
+          : "relative h-[clamp(220px,50vw,520px)] max-h-[65svh] w-full"
       }
-    />
+    >
+      <Image
+        src={src}
+        alt={image.alt || ""}
+        fill
+        sizes={
+          cover
+            ? "(max-width: 600px) 90vw, (max-width: 1920px) 45vw, 840px"
+            : "(max-width: 1920px) 90vw, 1700px"
+        }
+        placeholder={image.lqip ? "blur" : "empty"}
+        blurDataURL={image.lqip}
+        className={
+          cover
+            ? "object-contain transition-transform duration-500 ease-in-out motion-safe:group-hover/preview:scale-[1.025] motion-reduce:transition-none"
+            : "object-contain"
+        }
+      />
+    </div>
   );
 }
 
@@ -55,7 +60,7 @@ export default function ProjectCover({
     );
   if (project.kind) return <ProjectPreview kind={project.kind} wide={wide} />;
   return (
-    <div className="grid aspect-[4/3] place-items-center bg-surface p-8 text-center text-xl tracking-heading text-muted">
+    <div className="grid aspect-video max-h-80 place-items-center bg-surface p-8 text-center text-xl tracking-heading text-muted">
       {project.title}
     </div>
   );
