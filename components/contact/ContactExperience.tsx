@@ -73,7 +73,7 @@ export default function ContactExperience({
             <div
               role="group"
               aria-label="Contact direct"
-              className="mt-8 flex max-w-md animate-enter flex-col gap-7 [animation-delay:550ms] motion-reduce:animate-none min-[440px]:max-lg:mt-6 min-[440px]:max-lg:gap-5 sm:max-lg:grid sm:max-lg:max-w-none sm:max-lg:grid-cols-2 sm:max-lg:items-start sm:max-lg:gap-x-6 lg:mt-10"
+              className="mt-8 flex max-w-md animate-enter flex-col items-start gap-5 [animation-delay:550ms] motion-reduce:animate-none min-[440px]:max-lg:mt-6 lg:mt-10"
             >
               {email && (
                 <div>
@@ -86,20 +86,14 @@ export default function ContactExperience({
                 </div>
               )}
               {whatsappUrl && (
-                <div>
-                  <p className="mb-4 max-w-[34ch] text-sm leading-relaxed text-muted">
-                    Preferi să vorbim pe WhatsApp? Scrie-ne câteva cuvinte
-                    despre ideea ta.
-                  </p>
-                  <Button
-                    href={whatsappUrl}
-                    variant="secondary"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Scrie-ne pe WhatsApp
-                  </Button>
-                </div>
+                <Button
+                  href={whatsappUrl}
+                  variant="secondary"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Scrie-ne pe WhatsApp
+                </Button>
               )}
             </div>
           )}
