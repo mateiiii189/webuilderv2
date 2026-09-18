@@ -1,3 +1,4 @@
+import { heroTitle } from "@/lib/ui";
 import type { Metadata } from "next";
 import PageShell from "@/components/layout/PageShell";
 import ProjectGrid from "@/components/projects/ProjectGrid";
@@ -25,11 +26,8 @@ export default async function ProjectsPage() {
             <span className="h-px w-6 bg-primary" aria-hidden="true" />
             PROIECTE / WEBUILDER
           </p>
-          <div className="grid items-end gap-7 lg:grid-cols-[1.4fr_0.6fr] lg:gap-12">
-            <h1
-              id="portfolio-title"
-              className="text-[clamp(36px,10vw,40px)] leading-[1.08] font-medium tracking-hero sm:text-[clamp(44px,7.3vw,112px)]"
-            >
+          <div className="grid items-end gap-7 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,0.6fr)] lg:gap-12">
+            <h1 id="portfolio-title" className={heroTitle}>
               <TextEntrance delay={120}>Design cu direcție.</TextEntrance>
               <TextEntrance delay={250}>
                 <span className="text-primary">Detalii cu sens.</span>

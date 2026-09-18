@@ -5,7 +5,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { Sculpture } from "@/lib/sculpture";
 import Button from "@/components/ui/Button";
 import { BrandMark } from "@/components/ui/Brand";
-import { textLink } from "@/lib/ui";
+import { heroTitle, textLink } from "@/lib/ui";
 
 const delay = (ms: number) => ({ "--delay": `${ms}ms` }) as CSSProperties;
 
@@ -164,7 +164,7 @@ export default function Hero() {
           </div>
           <h1
             id="hero-title"
-            className="mb-[26px] -ml-[0.065em] text-hero-mobile leading-[1.065] font-medium tracking-hero lg:mb-7 lg:text-hero lg:leading-[1.07] lg:[@media(max-height:820px)]:text-[clamp(60px,6.3vw,102.4px)]"
+            className={`${heroTitle} mb-[26px] -ml-[0.065em] lg:mb-7`}
           >
             {["Idei mari.", "Execuție", "pe măsură."].map((line, index) => (
               <span

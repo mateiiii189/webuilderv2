@@ -1,3 +1,4 @@
+import { heroTitle } from "@/lib/ui";
 import TextEntrance from "@/components/ui/TextEntrance";
 import ContactForm from "./ContactForm";
 import AccordionItem from "@/components/ui/AccordionItem";
@@ -42,7 +43,7 @@ export default function ContactExperience({
             <span className="h-px w-6 bg-primary" aria-hidden="true" />
             CONTACT / WEBUILDER
           </p>
-          <h1 className="text-hero-mobile leading-[1.065] font-medium tracking-hero lg:text-hero lg:leading-[1.07] lg:[@media(max-height:820px)]:text-[clamp(60px,6.3vw,102.4px)]">
+          <h1 className={heroTitle}>
             <TextEntrance delay={120}>Ai o idee?</TextEntrance>
             <TextEntrance delay={250}>Hai să o</TextEntrance>
             <TextEntrance delay={380}>
@@ -64,9 +65,7 @@ export default function ContactExperience({
                   <p className="mb-2 text-kicker tracking-kicker text-muted">
                     E-MAIL DIRECT
                   </p>
-                  <p className={contactValue}>
-                    {email}
-                  </p>
+                  <p className={contactValue}>{email}</p>
                 </div>
               )}
               {phone && (

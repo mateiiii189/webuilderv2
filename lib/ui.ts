@@ -6,3 +6,5 @@ export const sectionTitle =
   "text-section-mobile font-medium leading-[1.12] tracking-heading sm:text-section";
 export const sectionDescription =
   "max-w-[34ch] text-[15px] leading-[1.8] text-muted";
+export const heroTitle =
+  "text-hero-mobile leading-[1.065] font-medium tracking-hero lg:text-hero lg:leading-[1.07] lg:[@media(max-height:820px)]:text-[clamp(60px,6.3vw,102.4px)]";

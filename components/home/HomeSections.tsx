@@ -2,7 +2,7 @@ import Button from "@/components/ui/Button";
 import Reveal from "@/components/ui/Reveal";
 import SectionHeading, { Kicker } from "@/components/ui/SectionHeading";
 import AccordionItem from "@/components/ui/AccordionItem";
-import ProjectCard from "@/components/projects/ProjectCard";
+import ProjectCover from "@/components/projects/ProjectCover";
 import { getFeaturedProjects } from "@/lib/projects";
 import { services, processSteps } from "@/lib/home-content";
 import { site } from "@/lib/site";
@@ -32,7 +32,47 @@ export default async function HomeSections() {
         <div className="grid items-start gap-7 sm:grid-cols-[1.1fr_0.9fr] sm:[&>div:nth-child(2)]:mt-18">
           {projects.map((project) => (
             <Reveal key={project._id}>
-              <ProjectCard project={project} home />
+              <details className="group/project overflow-hidden rounded-card border border-border bg-surface transition-colors duration-500 ease-in-out hover:border-primary motion-reduce:transition-none">
+                <summary className="group/preview focus-visible:-outline-offset-3">
+                  {project.isConcept && (
+                    <span className="sr-only">Concept demonstrativ. </span>
+                  )}
+                  <ProjectCover project={project} />
+                  <div className="flex flex-col items-start gap-3.5 p-[21px] sm:gap-4 sm:p-[25px] xl:flex-row xl:items-end xl:justify-between">
+                    <div>
+                      <p className="mb-2 text-kicker text-muted">
+                        {project.category}
+                      </p>
+                      <h3 className="text-xl font-medium tracking-[-0.04em] sm:text-[clamp(18px,1.6vw,26px)]">
+                        {project.title}
+                      </h3>
+                    </div>
+                    <span className="flex items-center gap-3 text-kicker whitespace-nowrap text-muted">
+                      {project.isConcept ? "Despre concept" : "Despre proiect"}
+                      <span
+                        className="inline-block text-[23px] text-primary transition-transform duration-500 group-open/project:rotate-45 motion-reduce:transition-none"
+                        aria-hidden="true"
+                      >
+                        +
+                      </span>
+                    </span>
+                  </div>
+                </summary>
+                <div className="px-[21px] pb-6 text-sm leading-[1.8] text-muted sm:px-[25px]">
+                  <p className="mb-2">{project.summary}</p>
+                  <a
+                    className={`${textLink} mr-5 inline-block`}
+                    href={`/proiecte/${project.slug}`}
+                  >
+                    {project.isConcept
+                      ? "Explorează conceptul →"
+                      : "Explorează proiectul →"}
+                  </a>
+                  <a className={textLink} href="/contact">
+                    Discută un proiect similar →
+                  </a>
+                </div>
+              </details>
             </Reveal>
           ))}
         </div>
@@ -65,7 +105,6 @@ export default async function HomeSections() {
                 key={service.title}
                 title={service.title}
                 number={`0${index + 1}`}
-                defaultOpen={index === 0}
               >
                 <p className="mb-5">{service.text}</p>
                 <span className="block text-kicker text-soft">

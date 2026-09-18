@@ -57,9 +57,7 @@ export default function Header({ innerPage = false }: { innerPage?: boolean }) {
             {item.label}
           </a>
         ))}
-        <Button href={contactHref}>
-          {innerPage ? "Scrie-ne" : "Hai să vorbim"}
-        </Button>
+        <Button href={contactHref}>Contactează-ne</Button>
       </nav>
       <button
         data-menu-toggle

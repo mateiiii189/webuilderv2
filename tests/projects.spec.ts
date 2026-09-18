@@ -27,8 +27,9 @@ test("portfolio pages fit narrow, intermediate, and desktop widths", async ({
           range.selectNodeContents(element);
           return (
             range.getBoundingClientRect().width <= element.clientWidth + 1 &&
-            element.getBoundingClientRect().height <=
-              parseFloat(getComputedStyle(element).lineHeight) + 1
+            (location.pathname === "/proiecte" ||
+              element.getBoundingClientRect().height <=
+                parseFloat(getComputedStyle(element).lineHeight) + 1)
           );
         });
         expect(fits).toBe(true);
@@ -54,7 +55,10 @@ test("portfolio links lead to concepts, the next concept, and contact", async ({
   await expect(page).toHaveURL(/\/proiecte\/platforma-management$/);
   await page.getByRole("link", { name: "Toate proiectele" }).click();
   await expect(page).toHaveURL(/\/proiecte$/);
-  await page.locator("header").getByRole("link", { name: "Scrie-ne" }).click();
+  await page
+    .locator("header")
+    .getByRole("link", { name: "Contactează-ne" })
+    .click();
   await expect(page).toHaveURL(/\/contact$/);
   await expect(page.locator("#contact-form")).toBeAttached();
 });

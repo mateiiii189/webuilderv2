@@ -113,7 +113,8 @@ test("service accordion animates its height and can reverse mid-transition", asy
   page,
 }) => {
   await page.goto("/");
-  const item = page.locator("#servicii details").nth(1);
+  await expect(page.locator("#servicii details[open]")).toHaveCount(0);
+  const item = page.locator("#servicii details").first();
   const summary = item.locator("summary");
   await summary.click();
   await expect(item).toHaveAttribute("data-expanded", "true");
@@ -141,9 +142,14 @@ test("logo stays stationary; button arrows move in the correct direction", async
   expect(after).toEqual(before);
   const button = page
     .locator("header")
-    .getByRole("link", { name: "Hai să vorbim" });
+    .getByRole("link", { name: "Contactează-ne" });
+  const buttonBefore = await button.boundingBox();
   await button.hover();
   await expect(button.locator("svg")).toHaveCSS("translate", "4px");
+  expect(await button.boundingBox()).toEqual(buttonBefore);
+  await page.mouse.move(0, 0);
+  await expect(button.locator("svg")).toHaveCSS("translate", "none");
+  expect(await button.boundingBox()).toEqual(buttonBefore);
   await page.goto("/missing-page");
   const back = page.getByRole("link", { name: "Înapoi la început" });
   await back.hover();
