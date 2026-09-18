@@ -6,13 +6,13 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Contact — Webuilder",
   description:
-    "Ai o idee? Hai s-o construim. Povestește-ne despre proiectul tău sau solicită o discuție online de 60 de minute.",
+    "Ai o idee? Hai să o construim. Povestește-ne despre proiectul tău sau solicită o discuție online de 60 de minute.",
 };
 
 export default function ContactPage() {
   return (
     <PageShell innerPage>
-      <ContactExperience email={site.email} whatsappUrl={site.whatsappUrl} />
+      <ContactExperience email={site.email} phone={site.phone} />
     </PageShell>
   );
 }

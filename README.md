@@ -96,8 +96,8 @@ The suite checks widths from 320px to 1920px in Chromium. Test real Safari/iOS a
 
 Deploy as a Next.js project on Vercel. Set `CONTACT_EMAIL` before the production build. Presentation pages are statically prerendered; signed booking-management pages render per request. Booking API responses and upstream requests use `no-store`. The booking route allows up to 120 seconds of server execution for the existing script’s Meet provisioning; confirm your deployment supports that duration. CMS content can use targeted revalidation when that integration is implemented.
 
-### WhatsApp contact
+### Direct contact details
 
 Set `CONTACT_WHATSAPP` in `.env.local` to your WhatsApp business number in international format (country code, without the local leading zero). Spaces and a leading `+` are accepted. Restart development, or rebuild production after setting the deployment variable.
 
-The Contact page displays the email address as selectable text without a border, arrow, or click action, followed by a short WhatsApp invitation and a “Scrie-ne pe WhatsApp” outline button. It opens a WhatsApp conversation with a short draft greeting; the visitor sends it themselves. An empty or malformed number hides the button. No WhatsApp API credentials or messaging service are needed.
+The Contact page displays the email address and a “Telefon” number as selectable text, with matching gold hover transitions and no borders, arrows, or click actions. The phone number uses the existing `CONTACT_WHATSAPP` setting; an empty or malformed number hides the phone entry.
