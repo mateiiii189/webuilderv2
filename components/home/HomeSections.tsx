@@ -30,14 +30,18 @@ export default async function HomeSections() {
           </SectionHeading>
         </Reveal>
         <div className="grid items-start gap-7 sm:grid-cols-[1.1fr_0.9fr] sm:[&>div:nth-child(2)]:mt-18">
-          {projects.map((project) => (
+          {projects.map((project, index) => (
             <Reveal key={project._id}>
               <details className="group/project overflow-hidden rounded-card border border-border bg-surface transition-colors duration-500 ease-in-out hover:border-primary motion-reduce:transition-none">
                 <summary className="group/preview focus-visible:-outline-offset-3">
                   {project.isConcept && (
                     <span className="sr-only">Concept demonstrativ. </span>
                   )}
-                  <ProjectCover project={project} />
+                  <ProjectCover
+                    project={project}
+                    presentation="featured"
+                    tone={index === 0 ? "warm" : "cool"}
+                  />
                   <div className="flex flex-col items-start gap-3.5 p-[21px] sm:gap-4 sm:p-[25px] xl:flex-row xl:items-end xl:justify-between">
                     <div>
                       <p className="mb-2 text-kicker text-muted">

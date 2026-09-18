@@ -119,8 +119,8 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </Reveal>
       </section>
       <Reveal>
-        <figure className="animate-enter overflow-hidden rounded-card border border-border [animation-delay:250ms] motion-reduce:animate-none">
-          <ProjectCover project={project} wide />
+        <figure className="mx-auto max-w-[1200px] animate-enter overflow-hidden rounded-card border border-border [animation-delay:250ms] motion-reduce:animate-none">
+          <ProjectCover project={project} presentation="detail" />
           <figcaption className="border-t border-border px-5 py-4 text-xs leading-relaxed text-muted sm:px-7">
             {project.cover?.caption ||
               (project.isConcept
@@ -176,7 +176,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
             .filter((image) => image.asset?._ref)
             .map((image, index) => (
               <Reveal key={index}>
-                <figure className="overflow-hidden rounded-card border border-border bg-surface">
+                <figure className="mx-auto w-full max-w-[1200px] overflow-hidden rounded-card border border-border bg-surface">
                   <ProjectGalleryImage image={image} />
                   {image.caption && (
                     <figcaption className="border-t border-border px-5 py-4 text-xs leading-relaxed text-muted">
