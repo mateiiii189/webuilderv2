@@ -100,4 +100,4 @@ Deploy as a Next.js project on Vercel. Set `CONTACT_EMAIL` before the production
 
 Set `CONTACT_WHATSAPP` in `.env.local` to your WhatsApp business number in international format (country code, without the local leading zero). Spaces and a leading `+` are accepted. Restart development, or rebuild production after setting the deployment variable.
 
-The Contact page groups matching “E-mail” and “WhatsApp” outline buttons below the introduction. It opens a WhatsApp conversation with a short draft greeting; the visitor sends it themselves. An empty or malformed number hides the button. No WhatsApp API credentials or messaging service are needed.
+The Contact page displays the email address as a text link without an arrow, followed by a short WhatsApp invitation and a “Scrie-ne pe WhatsApp” outline button. It opens a WhatsApp conversation with a short draft greeting; the visitor sends it themselves. An empty or malformed number hides the button. No WhatsApp API credentials or messaging service are needed.

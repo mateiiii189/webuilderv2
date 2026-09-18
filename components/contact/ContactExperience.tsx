@@ -56,28 +56,36 @@ export default function ContactExperience({
             <div
               role="group"
               aria-label="Contact direct"
-              className="mt-7 grid max-w-sm animate-enter grid-cols-1 gap-3 [animation-delay:550ms] motion-reduce:animate-none min-[360px]:grid-cols-2 lg:mt-8"
+              className="mt-8 max-w-md animate-enter space-y-7 [animation-delay:550ms] motion-reduce:animate-none lg:mt-10"
             >
               {email && (
-                <Button
-                  href={`mailto:${email}`}
-                  variant="secondary"
-                  title={email}
-                  className="w-full justify-between gap-3 px-4"
-                >
-                  E-mail
-                </Button>
+                <div>
+                  <p className="mb-2 text-kicker tracking-kicker text-muted">
+                    E-MAIL DIRECT
+                  </p>
+                  <a
+                    href={`mailto:${email}`}
+                    className="inline-block max-w-full py-1 text-xl font-medium tracking-tight [overflow-wrap:anywhere] text-foreground decoration-primary/50 underline-offset-8 transition-colors duration-500 hover:text-primary hover:underline focus-visible:outline-offset-4 motion-reduce:transition-none sm:text-2xl"
+                  >
+                    {email}
+                  </a>
+                </div>
               )}
               {whatsappUrl && (
-                <Button
-                  href={whatsappUrl}
-                  variant="secondary"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full justify-between gap-3 px-4"
-                >
-                  WhatsApp
-                </Button>
+                <div>
+                  <p className="mb-4 max-w-[34ch] text-sm leading-relaxed text-muted">
+                    Preferi să vorbim pe WhatsApp? Scrie-ne câteva cuvinte
+                    despre ideea ta.
+                  </p>
+                  <Button
+                    href={whatsappUrl}
+                    variant="secondary"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Scrie-ne pe WhatsApp
+                  </Button>
+                </div>
               )}
             </div>
           )}
