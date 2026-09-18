@@ -63,12 +63,9 @@ export default function ContactExperience({
                   <p className="mb-2 text-kicker tracking-kicker text-muted">
                     E-MAIL DIRECT
                   </p>
-                  <a
-                    href={`mailto:${email}`}
-                    className="inline-block max-w-full py-1 text-xl font-medium tracking-tight [overflow-wrap:anywhere] text-foreground decoration-primary/50 underline-offset-8 transition-colors duration-500 hover:text-primary hover:underline focus-visible:outline-offset-4 motion-reduce:transition-none sm:text-2xl"
-                  >
+                  <p className="inline-flex min-h-control w-fit max-w-full items-center rounded-control border border-field-border bg-transparent px-[22px] py-[13px] text-sm leading-normal font-medium [overflow-wrap:anywhere] text-foreground select-text">
                     {email}
-                  </a>
+                  </p>
                 </div>
               )}
               {whatsappUrl && (
