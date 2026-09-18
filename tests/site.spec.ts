@@ -145,15 +145,34 @@ test("logo stays stationary; button arrows move in the correct direction", async
     .getByRole("link", { name: "Contactează-ne" });
   const buttonBefore = await button.boundingBox();
   await button.hover();
-  await expect(button.locator("svg")).toHaveCSS("translate", "4px");
+  await expect(button.locator("svg")).toHaveCSS(
+    "transform",
+    "matrix(1, 0, 0, 1, 4, 0)",
+  );
   expect(await button.boundingBox()).toEqual(buttonBefore);
+  await expect(button.locator(":scope > span")).toHaveCSS(
+    "transform",
+    "matrix(1, 0, 0, 1, 0, -2)",
+  );
+  // Hover the original bottom edge: the lifted surface must not lose hover.
+  await button.hover({ position: { x: 10, y: buttonBefore!.height - 1 } });
+  await expect(button.locator(":scope > span")).toHaveCSS(
+    "transform",
+    "matrix(1, 0, 0, 1, 0, -2)",
+  );
   await page.mouse.move(0, 0);
-  await expect(button.locator("svg")).toHaveCSS("translate", "none");
+  await expect(button.locator("svg")).toHaveCSS(
+    "transform",
+    "matrix(1, 0, 0, 1, 0, 0)",
+  );
   expect(await button.boundingBox()).toEqual(buttonBefore);
   await page.goto("/missing-page");
   const back = page.getByRole("link", { name: "Înapoi la început" });
   await back.hover();
-  await expect(back.locator("svg")).toHaveCSS("translate", "-4px");
+  await expect(back.locator("svg")).toHaveCSS(
+    "transform",
+    "matrix(1, 0, 0, 1, -4, 0)",
+  );
 });
 
 test("Contact validates project enquiries and preserves notes when switching to booking", async ({

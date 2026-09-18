@@ -23,6 +23,28 @@ test("load more appends four at a time without replacing cards or changing the U
     name: "Arată mai multe",
     exact: true,
   });
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await button.hover();
+  await expect
+    .poll(() =>
+      button
+        .locator(":scope > span")
+        .evaluate(
+          (el) => new DOMMatrixReadOnly(getComputedStyle(el).transform).m42,
+        ),
+    )
+    .toBe(-2);
+  await page.mouse.move(0, 0);
+  await expect
+    .poll(() =>
+      button
+        .locator(":scope > span")
+        .evaluate(
+          (el) => new DOMMatrixReadOnly(getComputedStyle(el).transform).m42,
+        ),
+    )
+    .toBe(0);
+  await page.emulateMedia({ reducedMotion: "reduce" });
   for (const count of [8, 12, 15]) {
     await button.click();
     await expect(cards(page)).toHaveCount(count);

@@ -21,9 +21,9 @@ type ButtonProps = SharedProps &
   );
 const variants = {
   primary:
-    "border-primary bg-primary text-background enabled:hover:border-primary-hover enabled:hover:bg-primary-hover [&:not(button)]:hover:border-primary-hover [&:not(button)]:hover:bg-primary-hover",
+    "border-primary bg-primary text-background group-[:hover:not(:disabled)]/button:border-primary-hover group-[:hover:not(:disabled)]/button:bg-primary-hover",
   secondary:
-    "border-field-border bg-transparent text-foreground enabled:hover:border-primary enabled:hover:bg-primary/5 enabled:hover:text-primary [&:not(button)]:hover:border-primary [&:not(button)]:hover:bg-primary/5 [&:not(button)]:hover:text-primary",
+    "border-field-border bg-transparent text-foreground group-[:hover:not(:disabled)]/button:border-primary group-[:hover:not(:disabled)]/button:bg-primary/5 group-[:hover:not(:disabled)]/button:text-primary",
 };
 export default function Button({
   children,
@@ -35,17 +35,16 @@ export default function Button({
 }: ButtonProps) {
   const isBack = direction === "back";
   const classes = [
-    "group/button inline-flex min-h-control w-fit max-w-full items-center justify-center gap-6 rounded-control border px-[22px] py-[13px] text-center text-sm font-medium leading-normal transition-[scale,background-color,border-color,color] duration-500 ease-in-out focus-visible:outline-offset-5 disabled:cursor-not-allowed disabled:opacity-45 motion-safe:enabled:active:scale-[0.98] motion-safe:[&:not(button)]:active:scale-[0.98] motion-reduce:transition-none",
-    variants[variant],
+    "group/button inline-flex min-h-control w-fit max-w-full items-stretch rounded-control text-center text-sm font-medium leading-normal focus-visible:outline-offset-5 disabled:cursor-not-allowed disabled:opacity-45",
     className,
   ].join(" ");
   const icon = arrow && (
     <svg
-      className={`size-6 shrink-0 transition-transform duration-500 ease-in-out motion-reduce:transition-none ${
+      className={`block size-6 shrink-0 [transform:translate3d(0,0,0)] transition-[transform] duration-500 ease-in-out motion-reduce:transition-none ${
         isBack
-          ? "motion-safe:group-hover/button:-translate-x-1 motion-safe:group-focus-visible/button:-translate-x-1"
-          : "motion-safe:group-hover/button:translate-x-1 motion-safe:group-focus-visible/button:translate-x-1"
-      } group-disabled/button:translate-x-0`}
+          ? "motion-safe:group-[:focus-visible:not(:disabled)]/button:[transform:translate3d(-4px,0,0)] motion-safe:group-[:hover:not(:disabled)]/button:[transform:translate3d(-4px,0,0)]"
+          : "motion-safe:group-[:focus-visible:not(:disabled)]/button:[transform:translate3d(4px,0,0)] motion-safe:group-[:hover:not(:disabled)]/button:[transform:translate3d(4px,0,0)]"
+      }`}
       viewBox="0 0 24 24"
       fill="none"
       aria-hidden="true"
@@ -59,12 +58,15 @@ export default function Button({
       />
     </svg>
   );
+  // Move the visual surface, keeping the pointer target stable at its edges.
   const content = (
-    <>
+    <span
+      className={`pointer-events-none flex min-w-0 flex-1 [transform:translate3d(0,0,0)] items-center justify-center gap-6 rounded-control border px-[22px] py-[13px] transition-[transform,background-color,border-color,color] duration-500 ease-in-out motion-safe:group-[:active:not(:disabled)]/button:[transform:translate3d(0,0,0)_scale(0.98)] motion-safe:group-[:hover:not(:disabled):not(:active)]/button:[transform:translate3d(0,-2px,0)] motion-reduce:transition-none ${variants[variant]}`}
+    >
       {isBack && icon}
       <span className="min-w-0 wrap-anywhere">{children}</span>
       {!isBack && icon}
-    </>
+    </span>
   );
   if (typeof props.href === "string") {
     return props.href.startsWith("/") ? (
