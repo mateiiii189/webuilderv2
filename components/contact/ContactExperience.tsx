@@ -70,12 +70,27 @@ export default function ContactExperience({
                 </div>
               )}
               {phone && (
-                <div>
-                  <p className="mb-2 text-kicker tracking-kicker text-muted">
-                    Telefon
-                  </p>
-                  <p className={contactValue}>{phone}</p>
-                </div>
+                <>
+                  <div>
+                    <p className="mb-2 text-kicker tracking-kicker text-muted">
+                      Telefon
+                    </p>
+                    <p className={contactValue}>{phone}</p>
+                  </div>
+                  <div>
+                    <p className="mb-2 text-kicker tracking-kicker text-muted">
+                      Scrie-ne
+                    </p>
+                    <a
+                      href={`https://wa.me/${phone.replace(/\D/g, "")}`}
+                      className={`${contactValue} focus-visible:text-primary focus-visible:outline-offset-5`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      WhatsApp
+                    </a>
+                  </div>
+                </>
               )}
             </div>
           )}
