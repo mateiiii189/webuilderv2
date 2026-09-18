@@ -86,7 +86,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
                 liveUrl={project.liveUrl}
               />
             ) : (
-              <figure className="mx-auto max-w-[1000px] animate-enter [animation-delay:250ms] motion-reduce:animate-none">
+              <figure className="mx-auto max-w-[1000px] animate-enter [animation-delay:250ms] motion-reduce:animate-none max-xl:[&>a]:w-full max-xl:[&>a>img]:max-h-none max-xl:[&>a>img]:w-full">
                 <ProjectCover project={project} presentation="detail" />
                 <figcaption className="mt-5 border-t border-border pt-4 text-xs leading-relaxed text-muted">
                   {project.cover?.caption ||
