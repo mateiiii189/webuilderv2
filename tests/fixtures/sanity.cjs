@@ -8,7 +8,18 @@ const image = {
   alt: "Captură de test",
   caption: "Interfață de test",
 };
+const previewAssetId = `image-${"b".repeat(40)}-1600x4800-png`;
+const homepagePreview = {
+  _type: "image",
+  asset: { _type: "reference", _ref: previewAssetId },
+  alt: "Homepage completă de test",
+};
 const dataset = [
+  {
+    _id: previewAssetId,
+    _type: "sanity.imageAsset",
+    metadata: { dimensions: { width: 1600, height: 4800 } },
+  },
   {
     _id: assetId,
     _type: "sanity.imageAsset",
@@ -26,6 +37,7 @@ const dataset = [
     clientName: "Client de test",
     cover: image,
     gallery: [image],
+    homepagePreview: [9, 10].includes(index) ? homepagePreview : undefined,
     headline: ["Un proiect.", "O direcție."],
     direction: "Ideea proiectului",
     brief: "Povestea proiectului de test.",
@@ -35,7 +47,7 @@ const dataset = [
         description: "Informații organizate în jurul utilizatorului.",
       },
     ],
-    liveUrl: "https://example.test/",
+    liveUrl: index === 10 ? undefined : "https://example.test/",
     featured: index < 3,
     featuredOrder: index,
     // Tied dates deliberately exercise the _id pagination tiebreaker.

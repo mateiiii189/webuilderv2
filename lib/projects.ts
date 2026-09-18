@@ -55,7 +55,7 @@ const summaryFields = `_id, title, "slug": slug.current, publishedAt, categoryId
 const detailFields = `${summaryFields}, "text": coalesce(summary, ""),
   "headline": coalesce(headline, [title]), "direction": coalesce(direction, title),
   "brief": coalesce(brief, ""), "decisions": coalesce(decisions[]{title, description}, []),
-  clientName, liveUrl, "gallery": coalesce(gallery[]{${imageFields}}, [])`;
+  clientName, liveUrl, homepagePreview { ${imageFields} }, "gallery": coalesce(gallery[]{${imageFields}}, [])`;
 type RawProject = Omit<Project, "decisions"> & {
   decisions: { title: string; description: string }[];
 };

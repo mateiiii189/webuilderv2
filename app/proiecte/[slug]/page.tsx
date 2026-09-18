@@ -4,6 +4,7 @@ import PageShell from "@/components/layout/PageShell";
 import ProjectCover, {
   ProjectGalleryImage,
 } from "@/components/projects/ProjectCover";
+import ProjectHomepagePreview from "@/components/projects/ProjectHomepagePreview";
 import ProjectContact from "@/components/projects/ProjectContact";
 import Button from "@/components/ui/Button";
 import Reveal from "@/components/ui/Reveal";
@@ -119,15 +120,23 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </Reveal>
       </section>
       <Reveal>
-        <figure className="mx-auto max-w-[1200px] animate-enter overflow-hidden rounded-card border border-border [animation-delay:250ms] motion-reduce:animate-none">
-          <ProjectCover project={project} presentation="detail" />
-          <figcaption className="border-t border-border px-5 py-4 text-xs leading-relaxed text-muted sm:px-7">
-            {project.cover?.caption ||
-              (project.isConcept
-                ? `${project.title} — interfață demonstrativă. Datele și elementele vizuale sunt ilustrative.`
-                : project.title)}
-          </figcaption>
-        </figure>
+        {project.homepagePreview?.asset?._ref ? (
+          <ProjectHomepagePreview
+            image={project.homepagePreview}
+            title={project.title}
+            liveUrl={project.liveUrl}
+          />
+        ) : (
+          <figure className="mx-auto max-w-[1200px] animate-enter overflow-hidden rounded-card border border-border [animation-delay:250ms] motion-reduce:animate-none">
+            <ProjectCover project={project} presentation="detail" />
+            <figcaption className="border-t border-border px-5 py-4 text-xs leading-relaxed text-muted sm:px-7">
+              {project.cover?.caption ||
+                (project.isConcept
+                  ? `${project.title} — interfață demonstrativă. Datele și elementele vizuale sunt ilustrative.`
+                  : project.title)}
+            </figcaption>
+          </figure>
+        )}
       </Reveal>
       <section
         className={`${sectionSpacing} grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16`}

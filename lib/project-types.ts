@@ -35,6 +35,7 @@ export type Project = ProjectSummary & {
   decisions: ReadonlyArray<readonly [string, string]>;
   clientName?: string;
   liveUrl?: string;
+  homepagePreview?: ProjectImage | null;
   gallery: ProjectImage[];
 };
 

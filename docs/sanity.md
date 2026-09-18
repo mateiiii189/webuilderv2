@@ -35,6 +35,14 @@ Only published documents are read by the website. Once Sanity is configured, the
 
 The portfolio sorts by date, newest first, with document ID as a stable tiebreaker. Avoid changing dates unnecessarily while visitors browse. Keep published slugs stable; changing a slug changes the URL and requires a redirect if the old URL is already shared or indexed.
 
+## Homepage preview on project pages
+
+Under **Imagini → Previzualizare homepage**, upload a screenshot of the project's actual homepage (1440–1600 px wide works well). A full-page screenshot can be scrolled inside the browser-style preview; the window stays at most 560 px tall and adapts to smaller screens. This replaces only the lead image on that project's detail page. Its portfolio cover, homepage cards and gallery remain separate.
+
+Set **Publicare → Website / demo live** to the corresponding HTTPS website URL, then **Publish**. The preview shows the domain and a **Deschide website-ul** button that opens the real site in a new tab. Preview images work for unpublished concepts too, without a website button.
+
+This is an uploaded screenshot, not a live embedded website: adding a URL alone does not generate a screenshot. Update the screenshot in Studio when the site's design changes. Projects without a preview keep their existing lead image. No new service or API key is needed.
+
 ## Lots of projects
 
 - Four cards on the initial page, then **Arată mai multe** appends four more per click. Existing cards stay visible and the URL does not change. The button disappears after the last batch; failed requests can be retried. Server queries use date-and-ID cursors, not large query offsets.

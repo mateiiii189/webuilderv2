@@ -169,3 +169,57 @@ test("populated portfolio and controls fit mobile and tablet widths", async ({
     }
   }
 });
+
+test("homepage screenshot scrolls in a bounded preview with an optional live link", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  // Use the supplied screenshot dimensions so the test never depends on a CDN.
+  await page.route("**/_next/image?*", (route) =>
+    route.fulfill({
+      contentType: "image/svg+xml",
+      body: '<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="4800"><rect width="1600" height="4800" fill="#222"/></svg>',
+    }),
+  );
+  for (const width of [320, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/proiecte/proiect-test-9");
+    const preview = page.getByRole("region", {
+      name: "Previzualizare homepage — Proiect test 09",
+    });
+    await expect(
+      preview.getByRole("img", { name: "Homepage completă de test" }),
+    ).toBeVisible();
+    await preview.scrollIntoViewIfNeeded();
+    expect((await preview.boundingBox())!.height).toBeLessThanOrEqual(560);
+    await preview.focus();
+    await page.keyboard.press("ArrowDown");
+    await expect
+      .poll(() => preview.evaluate((el) => el.scrollTop))
+      .toBeGreaterThan(0);
+    const website = page.getByRole("link", {
+      name: "Deschide website-ul",
+      exact: true,
+    });
+    await expect(website).toHaveAttribute("href", "https://example.test/");
+    await expect(website).toHaveAttribute("target", "_blank");
+    await expect(page.locator("iframe")).toHaveCount(0);
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth,
+      ),
+    ).toBe(true);
+  }
+  await page.goto("/proiecte/proiect-test-10");
+  await expect(
+    page.getByRole("region", { name: /Previzualizare homepage/ }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Deschide website-ul", exact: true }),
+  ).toHaveCount(0);
+  await page.goto("/proiecte/proiect-test-8");
+  await expect(
+    page.getByRole("region", { name: /Previzualizare homepage/ }),
+  ).toHaveCount(0);
+  await expect(page.locator('main img[alt="Captură de test"]')).toHaveCount(2);
+});

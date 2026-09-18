@@ -162,6 +162,16 @@ export const projectType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "homepagePreview",
+      title: "Previzualizare homepage (opțional)",
+      description:
+        "Încarcă o captură a paginii principale, ideal la 1440–1600 px lățime. Poate fi o captură a întregii pagini: vizitatorii o pot derula în fereastră. Folosește Website / demo live din Publicare pentru butonul de deschidere. Captura se încarcă manual, nu se generează din URL.",
+      type: "image",
+      group: "media",
+      options: { hotspot: false },
+      fields: imageFields,
+    }),
+    defineField({
       name: "gallery",
       title: "Galerie",
       description:
