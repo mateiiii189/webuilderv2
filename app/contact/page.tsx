@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <PageShell innerPage>
-      <ContactExperience email={site.email} />
+      <ContactExperience email={site.email} whatsappUrl={site.whatsappUrl} />
     </PageShell>
   );
 }

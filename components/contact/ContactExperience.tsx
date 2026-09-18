@@ -1,3 +1,4 @@
+import Button from "@/components/ui/Button";
 import TextEntrance from "@/components/ui/TextEntrance";
 import ContactForm from "./ContactForm";
 import AccordionItem from "@/components/ui/AccordionItem";
@@ -24,7 +25,13 @@ const questions = [
   },
 ];
 
-export default function ContactExperience({ email }: { email: string }) {
+export default function ContactExperience({
+  email,
+  whatsappUrl,
+}: {
+  email: string;
+  whatsappUrl: string;
+}) {
   return (
     <>
       <div className="grid items-start gap-x-[clamp(40px,7vw,120px)] gap-y-9 pt-9 pb-16 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:grid-rows-[max-content_1fr] lg:gap-y-12 lg:pt-18 lg:pb-24">
@@ -54,6 +61,21 @@ export default function ContactExperience({ email }: { email: string }) {
               {email}
               <span aria-hidden="true">↗</span>
             </a>
+          )}
+          {whatsappUrl && (
+            <div className="mt-6 animate-enter [animation-delay:650ms] motion-reduce:animate-none">
+              <Button
+                href={whatsappUrl}
+                variant="secondary"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Scrie-ne pe WhatsApp
+              </Button>
+              <p className="mt-3 text-xs leading-relaxed text-muted">
+                Preferi un mesaj? Povestește-ne direct despre ideea ta.
+              </p>
+            </div>
           )}
         </Reveal>
 
