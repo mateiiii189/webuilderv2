@@ -22,3 +22,15 @@ Article pages render on the server with canonical URLs, Open Graph/Twitter metad
 ## Local verification
 
 `SANITY_INTEGRATION_TEST=1 npx playwright test tests/blog.spec.ts` uses only local CMS fixtures, including draft/future exclusions, pagination, rich text, navigation and mobile/tablet layouts. It does not publish to the real dataset. Run without that flag to check the unconfigured empty state.
+
+## Create 15 demo posts
+
+Run `npm run seed:posts -- --dry-run` to preview the 15 Romanian articles without contacting Sanity.
+
+To create them, use the existing `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET` settings in `.env.local`, plus `SANITY_API_WRITE_TOKEN` with Editor permissions (the same token used by `seed:projects`). Never prefix the write token with `NEXT_PUBLIC_` or commit it.
+
+Run `npm run seed:posts`. This creates **published demo articles** with generated PNG covers, excerpts, themes, publication dates, SEO fields and Portable Text bodies. They appear in `/studio` as Articol documents and in `/blog` after the cache updates. An empty blog paginates 4 → 8 → 12 → 15. The content is explicitly marked as demonstration copy; edit it before using it as final editorial content.
+
+Stable IDs (`webuilder-demo-article-01` through `webuilder-demo-article-15`) and `demo-` slugs make reruns safe. Existing documents, drafts and matching slugs are skipped, preserving Studio edits. A failed upload does not publish a partial batch; previously uploaded image assets may remain and are reusable on retry. No other articles or projects are modified. Remove/revoke the local write token when no longer needed.
+
+Local checks: `node --test tests/seed-posts.test.mjs`. Tests use an in-memory client and never contact Sanity.
