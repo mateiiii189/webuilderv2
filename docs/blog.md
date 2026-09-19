@@ -38,3 +38,5 @@ Stable IDs (`webuilder-demo-article-01` through `webuilder-demo-article-15`) and
 Local checks: `node --test tests/seed-posts.test.mjs`. Tests use an in-memory client and never contact Sanity.
 
 Article pages end with **Citește mai multe**: up to three recent published articles, excluding the current article, using the existing article cards and reveal animations. The section is hidden if no other articles are available.
+
+The blog listing includes a search form (Enter or **Caută**), searching published titles, excerpts, themes and article text across the whole dataset. Results retain four-at-a-time pagination. The `q` URL parameter makes searches shareable; **Șterge căutarea** restores the full listing. Article cards in both the listing and **Citește mai multe** use the project card frame, spacing, image zoom, gold border and arrow/lift hover treatment.

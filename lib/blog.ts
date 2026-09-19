@@ -30,18 +30,37 @@ export function decodeArticleCursor(
     return null;
   }
 }
-export async function getArticleBatch(after?: string): Promise<ArticleBatch> {
+export async function getArticleBatch(
+  after?: string,
+  query = "",
+): Promise<ArticleBatch> {
   if (!sanityClient) return { items: [], total: 0, next: null };
+  const search = query
+    .trim()
+    .slice(0, 100)
+    .replace(/[^\p{L}\p{N}\s-]/gu, " ")
+    .trim();
+  const articleFilter =
+    published +
+    (search
+      ? " && (title match $search || excerpt match $search || category match $search || pt::text(body) match $search)"
+      : query.trim()
+        ? " && false"
+        : "");
   const cursor = decodeArticleCursor(after);
   const filter = cursor
     ? " && (publishedAt < $date || (publishedAt == $date && _id < $id))"
     : "";
   const result = await sanityFetch<{ items: ArticleSummary[]; total: number }>(
     `{
-    "total": count(*[${published}]),
-    "items": *[${published}${filter}] | order(publishedAt desc, _id desc)[0...${ARTICLES_PER_PAGE + 1}]{${summary}}
+    "total": count(*[${articleFilter}]),
+    "items": *[${articleFilter}${filter}] | order(publishedAt desc, _id desc)[0...${ARTICLES_PER_PAGE + 1}]{${summary}}
   }`,
-    { date: cursor?.date ?? "", id: cursor?.id ?? "" },
+    {
+      date: cursor?.date ?? "",
+      id: cursor?.id ?? "",
+      search: search ? `${search}*` : "",
+    },
   );
   const items = result.items.slice(0, ARTICLES_PER_PAGE);
   const last = items.at(-1);

@@ -6,7 +6,13 @@ import Button from "@/components/ui/Button";
 import Reveal from "@/components/ui/Reveal";
 import ArticleCard from "./ArticleCard";
 
-export default function ArticleGrid({ initial }: { initial: ArticleBatch }) {
+export default function ArticleGrid({
+  initial,
+  query = "",
+}: {
+  initial: ArticleBatch;
+  query?: string;
+}) {
   const [batches, setBatches] = useState([initial.items]);
   const [next, setNext] = useState(initial.next);
   const [loading, setLoading] = useState(false);
@@ -21,7 +27,7 @@ export default function ArticleGrid({ initial }: { initial: ArticleBatch }) {
     setError(false);
     try {
       const response = await fetch(
-        `/api/blog?after=${encodeURIComponent(next)}`,
+        `/api/blog?after=${encodeURIComponent(next)}&q=${encodeURIComponent(query)}`,
       );
       if (!response.ok) throw new Error("Articles unavailable");
       const batch: ArticleBatch = await response.json();
@@ -46,6 +52,26 @@ export default function ArticleGrid({ initial }: { initial: ArticleBatch }) {
     }
   }
 
+  if (!batches[0].length && query) {
+    return (
+      <div
+        className="rounded-card border border-border px-6 py-12"
+        role="status"
+      >
+        <h3 className="text-2xl font-medium">
+          Nu am găsit articole pentru „{query}”.
+        </h3>
+        <p className="mt-3 text-muted">
+          Încearcă un alt cuvânt sau revino la toate articolele.
+        </p>
+        <div className="mt-6">
+          <Button href="/blog" variant="secondary">
+            Toate articolele
+          </Button>
+        </div>
+      </div>
+    );
+  }
   if (!batches[0].length) {
     return (
       <div className="rounded-card border border-border px-6 py-12 sm:px-9">

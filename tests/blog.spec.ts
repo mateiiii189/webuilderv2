@@ -60,6 +60,41 @@ test.describe("Sanity blog", () => {
     expect(xml).not.toContain("articol-viitor");
     expect(xml).not.toContain("articol-draft");
   });
+  test("search covers all articles, paginates matches, and clears cleanly", async ({
+    page,
+    request,
+  }) => {
+    await page.goto("/blog");
+    await page
+      .getByRole("searchbox", { name: "Caută un articol" })
+      .fill("Perspectiva 0");
+    await page.getByRole("button", { name: "Caută", exact: true }).click();
+    await expect(cards(page)).toHaveCount(1);
+    await expect(cards(page).first()).toHaveAttribute(
+      "href",
+      "/blog/articol-test-0",
+    );
+    await page.getByRole("searchbox").fill("design");
+    await page.getByRole("button", { name: "Caută", exact: true }).click();
+    await expect(cards(page)).toHaveCount(4);
+    await page.getByRole("button", { name: "Arată mai multe" }).click();
+    await expect(cards(page)).toHaveCount(8);
+    await page.getByRole("searchbox").fill("zzznomatch");
+    await page.getByRole("button", { name: "Caută", exact: true }).click();
+    await expect(
+      page.getByRole("heading", { name: /Nu am găsit/ }),
+    ).toBeVisible();
+    await expect(cards(page)).toHaveCount(0);
+    await page.getByRole("link", { name: "Șterge căutarea" }).click();
+    await expect(cards(page)).toHaveCount(4);
+    const bodyResult = await (
+      await request.get("/api/blog?q=" + encodeURIComponent("cererile"))
+    ).json();
+    expect(bodyResult.total).toBe(9);
+    expect((await request.get("/api/blog?q=" + "x".repeat(101))).status()).toBe(
+      400,
+    );
+  });
   test("article renders rich text, safe links, metadata and working contents", async ({
     page,
   }) => {

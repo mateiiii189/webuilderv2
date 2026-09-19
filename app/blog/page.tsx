@@ -1,3 +1,5 @@
+import Button from "@/components/ui/Button";
+import Link from "next/link";
 import type { Metadata } from "next";
 import PageShell from "@/components/layout/PageShell";
 import ArticleGrid from "@/components/blog/ArticleGrid";
@@ -14,8 +16,16 @@ export const metadata: Metadata = {
     "Perspective despre web design, SEO și automatizări. Idei practice pentru o prezență digitală mai bună.",
   alternates: { canonical: "https://webuilder.ro/blog" },
 };
-export default async function BlogPage() {
-  const initial = await getArticleBatch();
+export default async function BlogPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string | string[] }>;
+}) {
+  const params = await searchParams;
+  const query = (typeof params.q === "string" ? params.q : "")
+    .trim()
+    .slice(0, 100);
+  const initial = await getArticleBatch(undefined, query);
   return (
     <PageShell innerPage>
       <section
@@ -51,7 +61,47 @@ export default async function BlogPage() {
           </h2>
           <p className="text-xs text-muted">Perspective de la Webuilder.</p>
         </div>
-        <ArticleGrid initial={initial} />
+        <form
+          action="/blog"
+          role="search"
+          className="mb-9 flex flex-wrap items-end gap-3"
+        >
+          <div className="min-w-0 flex-1 basis-64">
+            <label
+              htmlFor="blog-search"
+              className="mb-2 block text-sm text-muted"
+            >
+              Caută un articol
+            </label>
+            <input
+              id="blog-search"
+              name="q"
+              type="search"
+              defaultValue={query}
+              key={query}
+              maxLength={100}
+              placeholder="Design, SEO, automatizări…"
+              className="min-h-14 w-full rounded-control border border-border bg-surface px-4 text-base text-foreground transition-colors duration-500 outline-none placeholder:text-muted hover:border-primary/50 focus:border-primary focus:ring-1 focus:ring-primary"
+            />
+          </div>
+          <Button type="submit" variant="secondary" arrow={false}>
+            Caută
+          </Button>
+          {query && (
+            <Link
+              href="/blog"
+              className="px-3 py-4 text-sm text-muted transition-colors duration-500 hover:text-primary"
+            >
+              Șterge căutarea
+            </Link>
+          )}
+        </form>
+        {query && (
+          <p role="status" className="mb-6 text-sm text-muted">
+            {initial.total} rezultate pentru „{query}”
+          </p>
+        )}
+        <ArticleGrid key={query} initial={initial} query={query} />
       </section>
       <ProjectContact />
     </PageShell>
