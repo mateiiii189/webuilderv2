@@ -1,9 +1,27 @@
+const whatsappNumber = (process.env.CONTACT_WHATSAPP ?? "")
+  .trim()
+  .replace(/[+\s()-]/g, "");
+
 export const site = {
-  email: "", // Add your real business email here.
+  // Public contact address, read on the server and passed to the form.
+  email: process.env.CONTACT_EMAIL ?? "",
+  phone: /^[1-9]\d{7,14}$/.test(whatsappNumber) ? `+${whatsappNumber}` : "",
 };
 
 export const navigation = [
-  { label: "Proiecte", href: "#proiecte" },
-  { label: "Servicii", href: "#servicii" },
-  { label: "Proces", href: "#proces" },
-];
+  { label: "Proiecte", id: "proiecte" },
+  { label: "Servicii", id: "servicii" },
+  { label: "Blog", id: "blog" },
+] as const;
+
+export function navigationFor(innerPage: boolean) {
+  return navigation.map(({ label, id }) => ({
+    label,
+    href:
+      id === "proiecte" || id === "blog"
+        ? `/${id}`
+        : innerPage
+          ? `/?section=${id}`
+          : `#${id}`,
+  }));
+}

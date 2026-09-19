@@ -16,11 +16,7 @@ export function createFrameLoop(
   let handle: number | null = null;
   let previous = clock.now();
 
-  const running = () =>
-    started &&
-    inView &&
-    clock.visible() &&
-    !destroyed;
+  const running = () => started && inView && clock.visible() && !destroyed;
 
   function schedule() {
     if (running() && handle === null) {
@@ -34,10 +30,7 @@ export function createFrameLoop(
     if (destroyed) return;
 
     const delta = running()
-      ? Math.min(
-          Math.max((now - previous) / 1000, 0),
-          0.05,
-        )
+      ? Math.min(Math.max((now - previous) / 1000, 0), 0.05)
       : 0;
 
     previous = now;
