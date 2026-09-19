@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { createImageUrlBuilder } from "@sanity/image-url";
 import { projectId, dataset } from "@/sanity/env";
-import { getArticle } from "@/lib/blog";
+import { getArticle, getArticleBatch } from "@/lib/blog";
 import {
   articleDate,
   blockText,
@@ -11,6 +11,7 @@ import {
 } from "@/lib/blog-types";
 import PageShell from "@/components/layout/PageShell";
 import ArticleImage from "@/components/blog/ArticleImage";
+import ArticleCard from "@/components/blog/ArticleCard";
 import ArticleBody from "@/components/blog/ArticleBody";
 import ArticleContents from "@/components/blog/ArticleContents";
 import ProjectContact from "@/components/projects/ProjectContact";
@@ -56,6 +57,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function ArticlePage({ params }: Props) {
   const article = await getArticle((await params).slug);
   if (!article) notFound();
+  const { items } = await getArticleBatch();
+  const moreArticles = items
+    .filter((item) => item.slug !== article.slug)
+    .slice(0, 3);
   const blocks = article.body.filter(
     (block): block is BlogTextBlock => block._type === "block",
   );
@@ -105,7 +110,7 @@ export default async function ArticlePage({ params }: Props) {
           Toate articolele
         </Button>
         <Reveal
-          className={`mt-8 grid w-full items-center gap-7 sm:mt-10 ${article.cover?.asset?._ref ? "lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-[clamp(28px,4vw,72px)]" : ""}`}
+          className={`mt-8 grid w-full items-center gap-7 sm:mt-10 ${article.cover?.asset?._ref ? "lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-[clamp(28px,4vw,72px)]" : ""}`}
         >
           <div
             className={`min-w-0 ${article.cover?.asset?._ref ? "lg:col-start-2 lg:row-start-1" : ""}`}
@@ -129,7 +134,7 @@ export default async function ArticlePage({ params }: Props) {
               <ArticleImage
                 image={article.cover}
                 eager
-                sizes="(max-width: 900px) 90vw, (max-width: 1920px) 40vw, 760px"
+                sizes="(max-width: 900px) 90vw, (max-width: 1920px) 49vw, 920px"
               />
               {article.cover.caption && (
                 <figcaption className="mt-3 text-xs leading-relaxed text-muted">
@@ -152,14 +157,34 @@ export default async function ArticlePage({ params }: Props) {
           )}
           <div className="w-full min-w-0">
             <ArticleBody body={article.body} />
-            <div className="mt-10 border-t border-border pt-6">
-              <Button href="/blog" variant="secondary" direction="back">
-                Înapoi la blog
-              </Button>
-            </div>
           </div>
         </div>
       </article>
+      {moreArticles.length > 0 && (
+        <section
+          aria-labelledby="read-more-title"
+          className="border-t border-border py-12 sm:py-16"
+        >
+          <Reveal>
+            <p className="text-kicker tracking-kicker text-muted">
+              MAI DEPARTE PE BLOG
+            </p>
+            <h2
+              id="read-more-title"
+              className="mt-4 text-[clamp(32px,4vw,56px)] leading-tight font-medium tracking-heading"
+            >
+              Citește mai multe
+            </h2>
+          </Reveal>
+          <div className="mt-8 grid gap-x-7 gap-y-10 sm:grid-cols-2 xl:grid-cols-3">
+            {moreArticles.map((item) => (
+              <Reveal key={item._id}>
+                <ArticleCard article={item} />
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
       <ProjectContact />
     </PageShell>
   );

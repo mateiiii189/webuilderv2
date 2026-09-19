@@ -36,3 +36,5 @@ Run `npm run seed:posts`. This creates **published demo articles** with generate
 Stable IDs (`webuilder-demo-article-01` through `webuilder-demo-article-15`) and `demo-` slugs make reruns safe. Existing documents, drafts and matching slugs are skipped, preserving Studio edits. A failed upload does not publish a partial batch; previously uploaded image assets may remain and are reusable on retry. No other articles or projects are modified. Remove/revoke the local write token when no longer needed.
 
 Local checks: `node --test tests/seed-posts.test.mjs`. Tests use an in-memory client and never contact Sanity.
+
+Article pages end with **Citește mai multe**: up to three recent published articles, excluding the current article, using the existing article cards and reveal animations. The section is hidden if no other articles are available.

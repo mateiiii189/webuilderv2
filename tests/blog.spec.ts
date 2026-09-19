@@ -83,6 +83,12 @@ test.describe("Sanity blog", () => {
       "Urmărește cererile de ofertă.",
     );
     await expect(page.locator("article img")).toHaveCount(2);
+    const more = page.getByRole("region", { name: "Citește mai multe" });
+    await expect(more.locator('a[href^="/blog/"]')).toHaveCount(3);
+    await expect(more.locator('a[href="/blog/articol-test-8"]')).toHaveCount(0);
+    await expect(
+      page.getByRole("link", { name: "Înapoi la blog", exact: true }),
+    ).toHaveCount(0);
     await page
       .getByRole("navigation", { name: "Cuprins articol" })
       .getByRole("link", { name: /Măsoară/ })
@@ -156,7 +162,7 @@ test.describe("Sanity blog", () => {
     const cover = await page.locator("article figure").first().boundingBox();
     const heading = await page.locator("h1").boundingBox();
     expect(cover!.x + cover!.width).toBeLessThan(heading!.x);
-    expect(cover!.height).toBeLessThan(500);
+    expect(cover!.height).toBeLessThan(600);
     await expect(page.locator("details summary")).not.toBeVisible();
     await page.setViewportSize({ width: 390, height: 900 });
     await page.getByRole("button", { name: "Meniu", exact: true }).click();
