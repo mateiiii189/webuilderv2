@@ -104,26 +104,32 @@ export default async function ArticlePage({ params }: Props) {
         <Button href="/blog" variant="secondary" direction="back">
           Toate articolele
         </Button>
-        <Reveal className="mt-10 w-full sm:mt-14">
-          <div className="mb-5 flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted">
-            <span className="text-primary">{article.category}</span>
-            <time dateTime={article.publishedAt}>
-              {articleDate(article.publishedAt)}
-            </time>
-            <span>{minutes} min de citit</span>
+        <Reveal
+          className={`mt-8 grid w-full items-center gap-7 sm:mt-10 ${article.cover?.asset?._ref ? "lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-[clamp(28px,4vw,72px)]" : ""}`}
+        >
+          <div
+            className={`min-w-0 ${article.cover?.asset?._ref ? "lg:col-start-2 lg:row-start-1" : ""}`}
+          >
+            <div className="mb-5 flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted">
+              <span className="text-primary">{article.category}</span>
+              <time dateTime={article.publishedAt}>
+                {articleDate(article.publishedAt)}
+              </time>
+              <span>{minutes} min de citit</span>
+            </div>
+            <h1 className="text-[clamp(36px,5.5vw,60px)] leading-[1.08] font-medium tracking-hero wrap-anywhere lg:text-[clamp(34px,3.5vw,64px)]">
+              <TextEntrance>{article.title}</TextEntrance>
+            </h1>
+            <p className="mt-6 max-w-[64ch] animate-enter text-base leading-relaxed text-muted [animation-delay:250ms] motion-reduce:animate-none sm:text-lg">
+              {article.excerpt}
+            </p>
           </div>
-          <h1 className="text-[clamp(36px,5.5vw,76px)] leading-[1.08] font-medium tracking-hero wrap-anywhere">
-            <TextEntrance>{article.title}</TextEntrance>
-          </h1>
-          <p className="mt-6 max-w-[64ch] animate-enter text-base leading-relaxed text-muted [animation-delay:250ms] motion-reduce:animate-none sm:text-lg">
-            {article.excerpt}
-          </p>
           {article.cover?.asset?._ref && (
-            <figure className="mt-8 animate-enter [animation-delay:350ms] motion-reduce:animate-none sm:mt-10">
+            <figure className="min-w-0 animate-enter [animation-delay:350ms] motion-reduce:animate-none lg:col-start-1 lg:row-start-1">
               <ArticleImage
                 image={article.cover}
                 eager
-                sizes="(max-width: 1920px) 90vw, 1720px"
+                sizes="(max-width: 900px) 90vw, (max-width: 1920px) 40vw, 760px"
               />
               {article.cover.caption && (
                 <figcaption className="mt-3 text-xs leading-relaxed text-muted">
@@ -134,7 +140,7 @@ export default async function ArticlePage({ params }: Props) {
           )}
         </Reveal>
         <div
-          className={`mt-10 grid w-full items-start gap-9 pb-24 sm:mt-14 sm:pb-24 ${headings.length ? "xl:grid-cols-[minmax(200px,0.25fr)_minmax(0,1fr)] xl:gap-[clamp(32px,5vw,96px)]" : ""}`}
+          className={`mt-10 grid w-full items-start gap-9 border-t border-border pt-8 pb-24 sm:mt-14 sm:pt-10 ${headings.length ? "xl:grid-cols-[minmax(0,1fr)_minmax(200px,0.25fr)] xl:gap-[clamp(32px,5vw,96px)]" : ""}`}
         >
           {headings.length > 0 && (
             <ArticleContents

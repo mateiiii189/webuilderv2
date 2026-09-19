@@ -62,7 +62,7 @@ export default function ArticleContents({ headings }: { headings: Heading[] }) {
 
   return (
     <>
-      <aside className="hidden min-w-0 border-y border-border py-5 xl:sticky xl:top-32 xl:block xl:max-h-[calc(100svh-160px)] xl:overflow-y-auto">
+      <aside className="hidden min-w-0 border-y border-border py-5 xl:sticky xl:top-32 xl:order-last xl:block xl:max-h-[calc(100svh-160px)] xl:overflow-y-auto">
         <p className="mb-4 text-kicker tracking-kicker text-soft">
           ÎN ACEST ARTICOL
         </p>

@@ -152,7 +152,11 @@ test.describe("Sanity blog", () => {
     const headingWidth = await page
       .locator("h1")
       .evaluate((el) => el.getBoundingClientRect().width);
-    expect(headingWidth).toBeGreaterThan(articleWidth * 0.95);
+    expect(headingWidth).toBeLessThan(articleWidth * 0.6);
+    const cover = await page.locator("article figure").first().boundingBox();
+    const heading = await page.locator("h1").boundingBox();
+    expect(cover!.x + cover!.width).toBeLessThan(heading!.x);
+    expect(cover!.height).toBeLessThan(500);
     await expect(page.locator("details summary")).not.toBeVisible();
     await page.setViewportSize({ width: 390, height: 900 });
     await page.getByRole("button", { name: "Meniu", exact: true }).click();
