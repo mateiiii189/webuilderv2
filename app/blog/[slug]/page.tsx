@@ -12,6 +12,7 @@ import {
 import PageShell from "@/components/layout/PageShell";
 import ArticleImage from "@/components/blog/ArticleImage";
 import ArticleBody from "@/components/blog/ArticleBody";
+import ArticleContents from "@/components/blog/ArticleContents";
 import ProjectContact from "@/components/projects/ProjectContact";
 import Button from "@/components/ui/Button";
 import Reveal from "@/components/ui/Reveal";
@@ -103,7 +104,7 @@ export default async function ArticlePage({ params }: Props) {
         <Button href="/blog" variant="secondary" direction="back">
           Toate articolele
         </Button>
-        <Reveal className="mx-auto mt-10 max-w-[1000px] sm:mt-14">
+        <Reveal className="mt-10 w-full sm:mt-14">
           <div className="mb-5 flex flex-wrap gap-x-5 gap-y-2 text-xs text-muted">
             <span className="text-primary">{article.category}</span>
             <time dateTime={article.publishedAt}>
@@ -119,7 +120,11 @@ export default async function ArticlePage({ params }: Props) {
           </p>
           {article.cover?.asset?._ref && (
             <figure className="mt-8 animate-enter [animation-delay:350ms] motion-reduce:animate-none sm:mt-10">
-              <ArticleImage image={article.cover} eager />
+              <ArticleImage
+                image={article.cover}
+                eager
+                sizes="(max-width: 1920px) 90vw, 1720px"
+              />
               {article.cover.caption && (
                 <figcaption className="mt-3 text-xs leading-relaxed text-muted">
                   {article.cover.caption}
@@ -129,34 +134,17 @@ export default async function ArticlePage({ params }: Props) {
           )}
         </Reveal>
         <div
-          className={`mx-auto mt-10 grid max-w-[1100px] items-start gap-9 pb-16 sm:mt-14 sm:pb-20 ${headings.length ? "lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-16" : ""}`}
+          className={`mt-10 grid w-full items-start gap-9 pb-24 sm:mt-14 sm:pb-24 ${headings.length ? "xl:grid-cols-[minmax(200px,0.25fr)_minmax(0,1fr)] xl:gap-[clamp(32px,5vw,96px)]" : ""}`}
         >
           {headings.length > 0 && (
-            <aside className="min-w-0 lg:sticky lg:top-32">
-              <details open className="border-y border-border py-5">
-                <summary className="cursor-pointer text-kicker tracking-kicker text-soft transition-colors duration-300 hover:text-primary">
-                  ÎN ACEST ARTICOL
-                </summary>
-                <nav aria-label="Cuprins articol" className="mt-4 grid gap-1">
-                  {headings.map((heading, index) => (
-                    <a
-                      key={heading._key}
-                      href={`#${encodeURIComponent(headingId(heading._key))}`}
-                      className="flex gap-3 py-2 text-sm leading-relaxed text-muted transition-colors duration-300 hover:text-primary focus-visible:text-primary"
-                    >
-                      <span className="shrink-0 text-primary">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      <span className="min-w-0 wrap-anywhere">
-                        {blockText(heading)}
-                      </span>
-                    </a>
-                  ))}
-                </nav>
-              </details>
-            </aside>
+            <ArticleContents
+              headings={headings.map((heading) => ({
+                id: headingId(heading._key),
+                title: blockText(heading),
+              }))}
+            />
           )}
-          <div className="mx-auto w-full max-w-[70ch] min-w-0">
+          <div className="w-full min-w-0">
             <ArticleBody body={article.body} />
             <div className="mt-10 border-t border-border pt-6">
               <Button href="/blog" variant="secondary" direction="back">

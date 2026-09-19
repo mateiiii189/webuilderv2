@@ -11,7 +11,9 @@ The blog uses the existing Sanity project and credentials; no new package, datab
 5. Optionally complete the **SEO** tab. Otherwise, the title and introduction supply the search metadata.
 6. Choose the publication date and click **Publish**. A future date keeps the article hidden until that time; drafts and articles with no body are excluded.
 
-The listing at `/blog` starts with four articles, newest first. **Arată mai multe** appends four, with the existing reveal animation. Each article has its own `/blog/[slug]` page, reading-time estimate, table of contents and contact CTA. With no published articles, the listing shows an honest empty state rather than sample content.
+The listing at `/blog` starts with four articles, newest first. **Arată mai multe** appends four, with the existing reveal animation. Each article has its own `/blog/[slug]` page, reading-time estimate, table of contents and contact CTA. Article pages use the full site content width. At 1101px and above, the contents list stays in a sticky left column. Below that width, a fixed bottom-right **Cuprins** menu opens the section links without taking space above the article. It closes on selection, outside click or Escape; Escape returns focus to the control.
+
+With no published articles, the listing shows an honest empty state rather than sample content.
 
 Header and footer navigation now show **Blog** in place of **Proces**. The existing process explanation remains a homepage section.
 

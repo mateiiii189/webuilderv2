@@ -7,10 +7,12 @@ export default function ArticleImage({
   image,
   inline = false,
   eager = false,
+  sizes,
 }: {
   image: ProjectImage;
   inline?: boolean;
   eager?: boolean;
+  sizes?: string;
 }) {
   const builder = createImageUrlBuilder({ projectId, dataset })
     .image(image)
@@ -23,7 +25,7 @@ export default function ArticleImage({
         alt={image.alt || ""}
         width={image.width || 1600}
         height={image.height || 1000}
-        sizes="(max-width: 900px) 90vw, 760px"
+        sizes="(max-width: 1100px) 90vw, (max-width: 1920px) 70vw, 1320px"
         className="h-auto w-full rounded-control"
         placeholder={image.lqip ? "blur" : "empty"}
         blurDataURL={image.lqip}
@@ -35,7 +37,9 @@ export default function ArticleImage({
         src={builder.width(1600).height(900).fit("crop").url()}
         alt={image.alt || ""}
         fill
-        sizes="(max-width: 600px) 90vw, (max-width: 1100px) 50vw, 1000px"
+        sizes={
+          sizes || "(max-width: 600px) 90vw, (max-width: 1100px) 50vw, 1000px"
+        }
         loading={eager ? "eager" : "lazy"}
         placeholder={image.lqip ? "blur" : "empty"}
         blurDataURL={image.lqip}

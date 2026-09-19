@@ -114,6 +114,46 @@ test.describe("Sanity blog", () => {
         ).toBe(true);
       }
     }
+    for (const width of [390, 768, 1100]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto("/blog/articol-test-8");
+      const trigger = page.locator("details summary");
+      await expect(trigger).toHaveText(/Cuprins/);
+      await trigger.click();
+      const menu = page.locator("details");
+      await expect(menu).toHaveAttribute("open", "");
+      const panel = menu.locator("nav");
+      const bounds = await panel.boundingBox();
+      expect(bounds!.x).toBeGreaterThanOrEqual(0);
+      expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(width);
+      await page.keyboard.press("Escape");
+      await expect(menu).not.toHaveAttribute("open");
+      await expect(trigger).toBeFocused();
+      await trigger.click();
+      await panel.getByRole("link", { name: /Măsoară/ }).click();
+      await expect(menu).not.toHaveAttribute("open");
+      await expect
+        .poll(() =>
+          page
+            .locator("#section-measure")
+            .evaluate((el) => el.getBoundingClientRect().top),
+        )
+        .toBeLessThan(150);
+      await expect(trigger).toBeInViewport();
+      await trigger.click();
+      await page.locator("#section-measure").click();
+      await expect(menu).not.toHaveAttribute("open");
+    }
+    await page.setViewportSize({ width: 1920, height: 900 });
+    await page.goto("/blog/articol-test-8");
+    const articleWidth = await page
+      .locator("article")
+      .evaluate((el) => el.getBoundingClientRect().width);
+    const headingWidth = await page
+      .locator("h1")
+      .evaluate((el) => el.getBoundingClientRect().width);
+    expect(headingWidth).toBeGreaterThan(articleWidth * 0.95);
+    await expect(page.locator("details summary")).not.toBeVisible();
     await page.setViewportSize({ width: 390, height: 900 });
     await page.getByRole("button", { name: "Meniu", exact: true }).click();
     const nav = page.getByRole("dialog");
